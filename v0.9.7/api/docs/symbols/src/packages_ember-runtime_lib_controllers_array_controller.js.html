@@ -1,0 +1,56 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">// ==========================================================================</span><span class="WHIT">
+<span class='line'>  2</span> </span><span class="COMM">// Project:  Ember Runtime</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">// Copyright: ©2011 Strobe Inc. and contributors.</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="COMM">// License:   Licensed under MIT license (see license.js)</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="COMM">// ==========================================================================</span><span class="WHIT">
+<span class='line'>  6</span> 
+<span class='line'>  7</span> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'ember-runtime/system/array_proxy'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  8</span> 
+<span class='line'>  9</span> </span><span class="COMM">/**
+<span class='line'> 10</span>   @class
+<span class='line'> 11</span> 
+<span class='line'> 12</span>   Ember.ArrayController provides a way for you to publish a collection of objects
+<span class='line'> 13</span>   so that you can easily bind to the collection from a Handlebars #each helper,
+<span class='line'> 14</span>   an Ember.CollectionView, or other controllers.
+<span class='line'> 15</span> 
+<span class='line'> 16</span>   The advantage of using an ArrayController is that you only have to set up
+<span class='line'> 17</span>   your view bindings once; to change what's displayed, simply swap out the
+<span class='line'> 18</span>   `content` property on the controller.
+<span class='line'> 19</span> 
+<span class='line'> 20</span>   For example, imagine you wanted to display a list of items fetched via an XHR
+<span class='line'> 21</span>   request. Create an Ember.ArrayController and set its `content` property:
+<span class='line'> 22</span> 
+<span class='line'> 23</span>       MyApp.listController = Ember.ArrayController.create();
+<span class='line'> 24</span> 
+<span class='line'> 25</span>       $.get('people.json', function(data) {
+<span class='line'> 26</span>         MyApp.listController.set('content', data);
+<span class='line'> 27</span>       });
+<span class='line'> 28</span> 
+<span class='line'> 29</span>   Then, create a view that binds to your new controller:
+<span class='line'> 30</span> 
+<span class='line'> 31</span>       {{#each MyApp.listController}}
+<span class='line'> 32</span>         {{firstName}} {{lastName}}
+<span class='line'> 33</span>       {{/each}}
+<span class='line'> 34</span> 
+<span class='line'> 35</span>   Although you are binding to the controller, the behavior of this controller
+<span class='line'> 36</span>   is to pass through any methods or properties to the underlying array. This
+<span class='line'> 37</span>   capability comes from `Ember.ArrayProxy`, which this class inherits from.
+<span class='line'> 38</span> 
+<span class='line'> 39</span>   Note: As of this writing, `ArrayController` does not add any functionality
+<span class='line'> 40</span>   to its superclass, `ArrayProxy`. The Ember team plans to add additional
+<span class='line'> 41</span>   controller-specific functionality in the future, e.g. single or multiple
+<span class='line'> 42</span>   selection support. If you are creating something that is conceptually a
+<span class='line'> 43</span>   controller, use this class.
+<span class='line'> 44</span> 
+<span class='line'> 45</span>   @extends Ember.ArrayProxy
+<span class='line'> 46</span> */</span><span class="WHIT">
+<span class='line'> 47</span> 
+<span class='line'> 48</span> </span><span class="NAME">Ember.ArrayController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.ArrayProxy.extend</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 49</span> </span></pre></body></html>

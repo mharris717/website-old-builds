@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- begin static/html-head.html -->
+    <meta charset="utf-8" />
+  <title>Ember.js API Docs</title>
+  <meta name="description" content="A framework for building fast, desktop caliber web applications." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/website-old-builds/v1.0.0/css/api.css" />
+
+  <!-- get CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="/website-old-builds/v1.0.0//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+  <script>(window.jQuery || document.write('<script src="/website-old-builds/v1.0.0/js/lib/jquery-1.7.2.min.js"><\/script>'))</script>
+
+  <script src="/website-old-builds/v1.0.0/js/jquery-bbq.js"></script>
+  <script src="/website-old-builds/v1.0.0/js/api.js"></script>
+  <script src="/website-old-builds/v1.0.0/js/lib/modernizr-1.7.min.js"></script>
+  <!--[if lt IE 9]>
+  <script src="/website-old-builds/v1.0.0//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+
+  <!-- end static/html-head.html -->
+</head>
+
+  <body id="docs">
+<!-- ============================== header ================================= -->
+    <!-- begin static/header.html -->
+      <header role="banner">
+    <div id="wrapper">
+      <div id="logo">&nbsp;</div>
+      <nav role="navigation">
+        <ul id="nav">
+          <li><a href="http://emberjs.com">docs</a></li>
+          <li><a href="http://emberjs.com/community">community</a></li>
+          <li><a href="http://emberjs.com/examples">examples</a></li>
+          <li class="active"><a href="http://emberjs.com/api">api</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+
+    <!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+
+    <section id="list">
+      <header>
+        <form action="#" role="search">
+          <input type="text" />
+          <a href="#" class="search-reset"></a>
+        </form>
+      </header>
+      <div>
+        <span class="odd active"><a href="/website-old-builds/v1.0.0/">API Documentation Index</a></span>
+	
+	<span class='even' global><a href="../symbols/_global_.html">_global_</a></span>
+	
+	<span class='odd'><a href="../symbols/Array.html">Array</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.html">Ember</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Application.html">Ember.Application</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Array.html">Ember.Array</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.ArrayController.html">Ember.ArrayController</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.ArrayProxy.html">Ember.ArrayProxy</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Binding.html">Ember.Binding</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Checkbox.html">Ember.Checkbox</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.CollectionView.html">Ember.CollectionView</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Comparable.html">Ember.Comparable</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.ComputedProperty.html">Ember.ComputedProperty</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.ContainerView.html">Ember.ContainerView</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Copyable.html">Ember.Copyable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.CoreObject.html">Ember.CoreObject</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Enumerable.html">Ember.Enumerable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Error.html">Ember.Error</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Freezable.html">Ember.Freezable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Handlebars.html">Ember.Handlebars</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Logger.html">Ember.Logger</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Mixin.html">Ember.Mixin</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.MutableArray.html">Ember.MutableArray</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.MutableEnumerable.html">Ember.MutableEnumerable</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.NativeArray.html">Ember.NativeArray</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Object.html">Ember.Object</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Observable.html">Ember.Observable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.platform.html">Ember.platform</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.RenderBuffer.html">Ember.RenderBuffer</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.run.html">Ember.run</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.RunLoop.html">Ember.RunLoop</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Set.html">Ember.Set</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.StateManager.html">Ember.StateManager</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.String.html">Ember.String</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.TextArea.html">Ember.TextArea</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.TextField.html">Ember.TextField</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.TextSupport.html">Ember.TextSupport</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.View.html">Ember.View</a></span>
+	
+	<span class='odd'><a href="../symbols/Function.html">Function</a></span>
+	
+	<span class='even'><a href="../symbols/Handlebars.helpers.html">Handlebars.helpers</a></span>
+	
+	<span class='odd'><a href="../symbols/String.html">String</a></span>
+	
+	<span class='even'><a href="../symbols/window.html">window</a></span>
+	
+
+      </div>
+    </section>
+
+    <div role="main">
+      <section id="documentation">
+<!-- ============================== class title ============================ -->
+        <h1 class="classTitle">
+          
+          Class: Ember.ComputedProperty
+        </h1>
+
+<!-- ============================== class summary ========================== -->
+        <p class="description">
+          <span class="extends">
+          
+          </span>
+
+        
+
+          
+
+          
+            <span class="definedin">Defined in: <a href="../symbols/src/packages_ember-metal_lib_computed.js.html">computed.js</a>.</span>
+          
+        </p>
+
+
+<!-- ============================== properties summary ===================== -->
+      
+      
+        
+        <h2>Field Summary</h2>
+        <div id="properties">
+        
+          <ul>
+          
+            <li>
+              Ember.ComputedProperty.<a href="../symbols/Ember.ComputedProperty.html#.cacheable">cacheable</a>
+            </li>
+          
+            <li>
+              Ember.ComputedProperty.<a href="../symbols/Ember.ComputedProperty.html#.meta">meta</a>
+            </li>
+          
+            <li>
+              Ember.ComputedProperty.<a href="../symbols/Ember.ComputedProperty.html#.property">property</a>
+            </li>
+          
+          </ul>
+        
+
+        
+        </div>
+      
+
+
+
+
+<!-- ============================== methods summary ======================== -->
+      
+      
+        
+        
+      
+        
+        
+      
+<!-- ============================== events summary ======================== -->
+      
+
+
+
+<!-- ============================== field details ========================== -->
+      
+        <h2>
+          Field Detail
+        </h2>
+        
+          <a name=".cacheable"> </a>
+          <span class="light"><a href="../symbols/Ember.ComputedProperty.html">Ember.ComputedProperty</a></span>
+          <span class="property"><span class="light">Ember.ComputedProperty.</span><b>cacheable</b></span>
+
+          <div class="description">
+            <p>Call on a computed property to set it into cacheable mode.  When in this
+mode the computed property will automatically cache the return value of
+your function until one of the dependent keys changes.</p>
+
+<pre><code class='syntax js'><span class="class">MyApp</span>.<span class="variable">president</span> = <span class="class">Ember</span>.<span class="class">Object</span>.<span class="variable">create</span>({
+  <span class="variable">fullName</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="this">this</span>.<span class="variable">get</span>(<span class="string">'firstName'</span>) + <span class="string">' '</span> + <span class="this">this</span>.<span class="variable">get</span>(<span class="string">'lastName'</span>);
+
+    <span class="comment">// After calculating the value of this function, Ember.js will</span>
+    <span class="comment">// return that value without re-executing this function until</span>
+    <span class="comment">// one of the dependent properties change.</span>
+  }.<span class="variable">property</span>(<span class="string">'firstName'</span>, <span class="string">'lastName'</span>).<span class="variable">cacheable</span>()
+});
+</code></pre>
+
+<p>It is common to use <code class='syntax js'><span class="variable">cacheable</span>()</code> on nearly every computed property
+you define.</p>
+            
+            
+          </div>
+
+          
+
+            
+            
+            
+            
+
+        
+          <a name=".meta"> </a>
+          <span class="light"><a href="../symbols/Ember.ComputedProperty.html">Ember.ComputedProperty</a></span>
+          <span class="property"><span class="light">Ember.ComputedProperty.</span><b>meta</b></span>
+
+          <div class="description">
+            <p>In some cases, you may want to annotate computed properties with additional
+metadata about how they function or what values they operate on. For example,
+computed property functions may close over variables that are then no longer
+available for introspection.</p>
+
+<p>You can pass a hash of these values to a computed property like this:</p>
+
+<pre><code class='syntax js'><span class="variable">person</span>: <span class="keyword">function</span>() {
+  <span class="keyword">var</span> <span class="variable">personId</span> = <span class="this">this</span>.<span class="variable">get</span>(<span class="string">'personId'</span>);
+  <span class="keyword">return</span> <span class="class">App</span>.<span class="class">Person</span>.<span class="variable">create</span>({ <span class="variable">id</span>: <span class="variable">personId</span> });
+}.<span class="variable">property</span>().<span class="variable">meta</span>({ <span class="variable">type</span>: <span class="class">App</span>.<span class="class">Person</span> })
+</code></pre>
+
+<p>The hash that you pass to the <code class='syntax js'><span class="variable">meta</span>()</code> function will be saved on the
+computed property descriptor under the <code class='syntax js'><span class="variable">_meta</span></code> key. Ember runtime
+exposes a public API for retrieving these values from classes,
+via the <code class='syntax js'><span class="variable">metaForProperty</span>()</code> function.</p>
+            
+            
+          </div>
+
+          
+
+            
+            
+            
+            
+
+        
+          <a name=".property"> </a>
+          <span class="light"><a href="../symbols/Ember.ComputedProperty.html">Ember.ComputedProperty</a></span>
+          <span class="property"><span class="light">Ember.ComputedProperty.</span><b>property</b></span>
+
+          <div class="description">
+            <p>Sets the dependent keys on this computed property.  Pass any number of
+arguments containing key paths that this computed property depends on.</p>
+
+<pre><code class='syntax js'><span class="class">MyApp</span>.<span class="variable">president</span> = <span class="class">Ember</span>.<span class="class">Object</span>.<span class="variable">create</span>({
+  <span class="variable">fullName</span>: <span class="class">Ember</span>.<span class="variable">computed</span>(<span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="this">this</span>.<span class="variable">get</span>(<span class="string">'firstName'</span>) + <span class="string">' '</span> + <span class="this">this</span>.<span class="variable">get</span>(<span class="string">'lastName'</span>);
+
+    <span class="comment">// Tell Ember.js that this computed property depends on firstName</span>
+    <span class="comment">// and lastName</span>
+  }).<span class="variable">property</span>(<span class="string">'firstName'</span>, <span class="string">'lastName'</span>)
+});
+</code></pre>
+            
+            
+          </div>
+
+          
+
+            
+            
+            
+            
+
+        
+      
+
+
+<!-- ============================== method details ========================= -->
+      
+        
+        
+      
+        
+        
+      
+
+<!-- ============================== event details ========================= -->
+      
+
+
+
+<!-- ============================== footer ================================= -->
+        <div class="fineprint" style="clear:both">
+          
+          Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Sep 17 2013 14:59:52 GMT-0400 (EDT)
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

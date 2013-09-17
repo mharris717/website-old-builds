@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- begin static/html-head.html -->
+    <meta charset="utf-8" />
+  <title>Ember.js API Docs</title>
+  <meta name="description" content="A framework for building fast, desktop caliber web applications." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/website-old-builds/v1.0.0/css/api.css" />
+
+  <!-- get CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="/website-old-builds/v1.0.0//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+  <script>(window.jQuery || document.write('<script src="/website-old-builds/v1.0.0/js/lib/jquery-1.7.2.min.js"><\/script>'))</script>
+
+  <script src="/website-old-builds/v1.0.0/js/jquery-bbq.js"></script>
+  <script src="/website-old-builds/v1.0.0/js/api.js"></script>
+  <script src="/website-old-builds/v1.0.0/js/lib/modernizr-1.7.min.js"></script>
+  <!--[if lt IE 9]>
+  <script src="/website-old-builds/v1.0.0//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+
+  <!-- end static/html-head.html -->
+</head>
+
+  <body id="docs">
+<!-- ============================== header ================================= -->
+    <!-- begin static/header.html -->
+      <header role="banner">
+    <div id="wrapper">
+      <div id="logo">&nbsp;</div>
+      <nav role="navigation">
+        <ul id="nav">
+          <li><a href="http://emberjs.com">docs</a></li>
+          <li><a href="http://emberjs.com/community">community</a></li>
+          <li><a href="http://emberjs.com/examples">examples</a></li>
+          <li class="active"><a href="http://emberjs.com/api">api</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+
+    <!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+
+    <section id="list">
+      <header>
+        <form action="#" role="search">
+          <input type="text" />
+          <a href="#" class="search-reset"></a>
+        </form>
+      </header>
+      <div>
+        <span class="odd active"><a href="/website-old-builds/v1.0.0/">API Documentation Index</a></span>
+	
+	<span class='even' global><a href="../symbols/_global_.html">_global_</a></span>
+	
+	<span class='odd'><a href="../symbols/Array.html">Array</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.html">Ember</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Application.html">Ember.Application</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Array.html">Ember.Array</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.ArrayController.html">Ember.ArrayController</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.ArrayProxy.html">Ember.ArrayProxy</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Binding.html">Ember.Binding</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Checkbox.html">Ember.Checkbox</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.CollectionView.html">Ember.CollectionView</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Comparable.html">Ember.Comparable</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.ComputedProperty.html">Ember.ComputedProperty</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.ContainerView.html">Ember.ContainerView</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Copyable.html">Ember.Copyable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.CoreObject.html">Ember.CoreObject</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Enumerable.html">Ember.Enumerable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Error.html">Ember.Error</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Freezable.html">Ember.Freezable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Handlebars.html">Ember.Handlebars</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Logger.html">Ember.Logger</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Mixin.html">Ember.Mixin</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.MutableArray.html">Ember.MutableArray</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.MutableEnumerable.html">Ember.MutableEnumerable</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.NativeArray.html">Ember.NativeArray</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Object.html">Ember.Object</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Observable.html">Ember.Observable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.platform.html">Ember.platform</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.RenderBuffer.html">Ember.RenderBuffer</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.run.html">Ember.run</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.RunLoop.html">Ember.RunLoop</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Set.html">Ember.Set</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.StateManager.html">Ember.StateManager</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.String.html">Ember.String</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.TextArea.html">Ember.TextArea</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.TextField.html">Ember.TextField</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.TextSupport.html">Ember.TextSupport</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.View.html">Ember.View</a></span>
+	
+	<span class='odd'><a href="../symbols/Function.html">Function</a></span>
+	
+	<span class='even'><a href="../symbols/Handlebars.helpers.html">Handlebars.helpers</a></span>
+	
+	<span class='odd'><a href="../symbols/String.html">String</a></span>
+	
+	<span class='even'><a href="../symbols/window.html">window</a></span>
+	
+
+      </div>
+    </section>
+
+    <div role="main">
+      <section id="documentation">
+<!-- ============================== class title ============================ -->
+        <h1 class="classTitle">
+          
+          Class: Ember.StateManager
+        </h1>
+
+<!-- ============================== class summary ========================== -->
+        <p class="description">
+          <span class="extends">
+          
+          </span>
+
+        
+
+          <p>StateManager is part of Ember's implementation of a finite state machine. A StateManager
+instance manages a number of properties that are instances of <code class='syntax js'><span class="class">Ember</span>.<span class="class">State</span></code>,
+tracks the current active state, and triggers callbacks when states have changed.</p>
+
+<h2 id="definingstates">Defining States</h2>
+
+<p>The states of StateManager can be declared in one of two ways. First, you can define
+a <code class='syntax js'><span class="variable">states</span></code> property that contains all the states:</p>
+
+<pre><code class='syntax js'><span class="variable">managerA</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">states</span>: {
+    <span class="variable">stateOne</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>(),
+    <span class="variable">stateTwo</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>()
+  }
+})
+
+<span class="variable">managerA</span>.<span class="variable">get</span>(<span class="string">'states'</span>)
+<span class="comment">// {</span>
+<span class="comment">//   stateOne: Ember.State.create(),</span>
+<span class="comment">//   stateTwo: Ember.State.create()</span>
+<span class="comment">// }</span>
+</code></pre>
+
+<p>You can also add instances of <code class='syntax js'><span class="class">Ember</span>.<span class="class">State</span></code> (or an <code class='syntax js'><span class="class">Ember</span>.<span class="class">State</span></code> subclass) directly as properties
+of a StateManager. These states will be collected into the <code class='syntax js'><span class="variable">states</span></code> property for you.</p>
+
+<pre><code class='syntax js'><span class="variable">managerA</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">stateOne</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>(),
+  <span class="variable">stateTwo</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>()
+})
+
+<span class="variable">managerA</span>.<span class="variable">get</span>(<span class="string">'states'</span>)
+<span class="comment">// {</span>
+<span class="comment">//   stateOne: Ember.State.create(),</span>
+<span class="comment">//   stateTwo: Ember.State.create()</span>
+<span class="comment">// }</span>
+</code></pre>
+
+<h2 id="theinitialstate">The Initial State</h2>
+
+<p>When created a StateManager instance will immediately enter into the state
+defined as its <code class='syntax js'><span class="variable">start</span></code> property or the state referenced by name in its 
+<code class='syntax js'><span class="variable">initialState</span></code> property:</p>
+
+<pre><code class='syntax js'><span class="variable">managerA</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">start</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({})
+})
+
+<span class="variable">managerA</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'start'</span>
+
+<span class="variable">managerB</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">initialState</span>: <span class="string">'beginHere'</span>,
+  <span class="variable">beginHere</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({})
+})
+
+<span class="variable">managerB</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'beginHere'</span>
+</code></pre>
+
+<p>Because it is a property you may also provided a computed function if you wish to derive
+an <code class='syntax js'><span class="variable">initialState</span></code> programmatically:</p>
+
+<pre><code class='syntax js'><span class="variable">managerC</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">initialState</span>: <span class="keyword">function</span>(){
+    <span class="keyword">if</span> (<span class="variable">someLogic</span>) {
+      <span class="keyword">return</span> <span class="string">'active'</span>;
+    } <span class="keyword">else</span> {
+      <span class="keyword">return</span> <span class="string">'passive'</span>;
+    }
+  }.<span class="variable">property</span>(),
+  <span class="variable">active</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({})
+  <span class="variable">passive</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({})
+})
+</code></pre>
+
+<h2 id="movingbetweenstates">Moving Between States</h2>
+
+<p>A StateManager can have any number of <code class='syntax js'><span class="class">Ember</span>.<span class="class">State</span></code> objects as properties
+and can have a single one of these states as its current state.</p>
+
+<p>Calling <code class='syntax js'><span class="variable">goToState</span></code> transitions between states:</p>
+
+<pre><code class='syntax js'><span class="variable">robotManager</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">initialState</span>: <span class="string">'poweredDown'</span>,
+   <span class="variable">poweredDown</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({}),
+   <span class="variable">poweredUp</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({})
+ })
+
+ <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'poweredDown'</span>
+ <span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'poweredUp'</span>)
+ <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'poweredUp'</span>
+</code></pre>
+
+<p>Before transitioning into a new state the existing <code class='syntax js'><span class="variable">currentState</span></code> will have its
+<code class='syntax js'><span class="variable">exit</span></code> method called with with the StateManager instance as its first argument and 
+an object representing the the transition as its second argument.</p>
+
+<p>After transitioning into a new state the new <code class='syntax js'><span class="variable">currentState</span></code> will have its
+<code class='syntax js'><span class="variable">enter</span></code> method called with with the StateManager instance as its first argument and 
+an object representing the the transition as its second argument.</p>
+
+<pre><code class='syntax js'><span class="variable">robotManager</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+ <span class="variable">initialState</span>: <span class="string">'poweredDown'</span>,
+  <span class="variable">poweredDown</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+    <span class="variable">exit</span>: <span class="keyword">function</span>(<span class="variable">stateManager</span>, <span class="variable">transition</span>){
+      <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;exiting the poweredDown state&quot;</span>)
+    }
+  }),
+  <span class="variable">poweredUp</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+    <span class="variable">enter</span>: <span class="keyword">function</span>(<span class="variable">stateManager</span>, <span class="variable">transition</span>){
+      <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;entering the poweredUp state. Destroy all humans.&quot;</span>)
+    }
+  })
+})
+
+<span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'poweredDown'</span>
+<span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'poweredUp'</span>)
+<span class="comment">// will log</span>
+<span class="comment">// 'exiting the poweredDown state'</span>
+<span class="comment">// 'entering the poweredUp state. Destroy all humans.'</span>
+</code></pre>
+
+<p>Once a StateManager is already in a state, subsequent attempts to enter that state will
+not trigger enter or exit method calls. Attempts to transition into a state that the 
+manager does not have will result in no changes in the StateManager's current state:</p>
+
+<pre><code class='syntax js'><span class="variable">robotManager</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+ <span class="variable">initialState</span>: <span class="string">'poweredDown'</span>,
+  <span class="variable">poweredDown</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+    <span class="variable">exit</span>: <span class="keyword">function</span>(<span class="variable">stateManager</span>, <span class="variable">transition</span>){
+      <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;exiting the poweredDown state&quot;</span>)
+    }
+  }),
+  <span class="variable">poweredUp</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+    <span class="variable">enter</span>: <span class="keyword">function</span>(<span class="variable">stateManager</span>, <span class="variable">transition</span>){
+      <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;entering the poweredUp state. Destroy all humans.&quot;</span>)
+    }
+  })
+})
+
+<span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'poweredDown'</span>
+<span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'poweredUp'</span>)
+<span class="comment">// will log</span>
+<span class="comment">// 'exiting the poweredDown state'</span>
+<span class="comment">// 'entering the poweredUp state. Destroy all humans.'</span>
+<span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'poweredUp'</span>) <span class="comment">// no logging, no state change</span>
+
+<span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'someUnknownState'</span>) <span class="comment">// silently fails</span>
+<span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'poweredUp'</span>
+</code></pre>
+
+<p>Each state property may itself contain properties that are instances of <code class='syntax js'><span class="class">Ember</span>.<span class="class">State</span>.</code> 
+The StateManager can transition to specific sub-states in a series of <code class='syntax js'><span class="variable">goToState</span></code> method calls or
+via a single <code class='syntax js'><span class="variable">goToState</span></code> with the full path to the specific state. The StateManager will also 
+keep track of the full path to its <code class='syntax js'><span class="variable">currentState</span></code></p>
+
+<pre><code class='syntax js'><span class="variable">robotManager</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">initialState</span>: <span class="string">'poweredDown'</span>,
+   <span class="variable">poweredDown</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+     <span class="variable">charging</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>(),
+     <span class="variable">charged</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>()
+   }),
+   <span class="variable">poweredUp</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+     <span class="variable">mobile</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>(),
+     <span class="variable">stationary</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>()
+   })
+ })
+
+ <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'poweredDown'</span>
+
+ <span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'poweredUp'</span>)
+ <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'poweredUp'</span>
+
+ <span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'mobile'</span>)
+ <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'mobile'</span>
+
+ <span class="comment">// transition via a state path</span>
+ <span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'poweredDown.charging'</span>)
+ <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'charging'</span>
+
+ <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.get.path'</span>) <span class="comment">// 'poweredDown.charging'</span>
+</code></pre>
+
+<p>Enter transition methods will be called for each state and nested child state in their 
+  hierarchical order.  Exit methods will be called for each state and its nested states in
+  reverse hierarchical order.</p>
+
+<p>Exit transitions for a parent state are not called when entering into one of its child states,
+  only when transitioning to a new section of possible states in the hierarchy.</p>
+
+<pre><code class='syntax js'><span class="variable">robotManager</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+   <span class="variable">initialState</span>: <span class="string">'poweredDown'</span>,
+    <span class="variable">poweredDown</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+      <span class="variable">enter</span>: <span class="keyword">function</span>(){},
+      <span class="variable">exit</span>: <span class="keyword">function</span>(){
+        <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;exited poweredDown state&quot;</span>)
+      },
+      <span class="variable">charging</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+        <span class="variable">enter</span>: <span class="keyword">function</span>(){},
+        <span class="variable">exit</span>: <span class="keyword">function</span>(){}
+      }),
+      <span class="variable">charged</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+        <span class="variable">enter</span>: <span class="keyword">function</span>(){
+          <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;entered charged state&quot;</span>)
+        },
+        <span class="variable">exit</span>: <span class="keyword">function</span>(){
+          <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;exited charged state&quot;</span>)
+        }
+      })
+    }),
+    <span class="variable">poweredUp</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+      <span class="variable">enter</span>: <span class="keyword">function</span>(){
+        <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;entered poweredUp state&quot;</span>)
+      },
+      <span class="variable">exit</span>: <span class="keyword">function</span>(){},
+      <span class="variable">mobile</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+        <span class="variable">enter</span>: <span class="keyword">function</span>(){
+          <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;entered mobile state&quot;</span>)
+        },
+        <span class="variable">exit</span>: <span class="keyword">function</span>(){}
+      }),
+      <span class="variable">stationary</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+        <span class="variable">enter</span>: <span class="keyword">function</span>(){},
+        <span class="variable">exit</span>: <span class="keyword">function</span>(){}
+      })
+    })
+  })
+
+
+  <span class="variable">robotManager</span>.<span class="variable">get</span>(<span class="string">'currentState.get.path'</span>) <span class="comment">// 'poweredDown'</span>
+  <span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'charged'</span>)
+  <span class="comment">// logs 'entered charged state'</span>
+  <span class="comment">// but does *not* log  'exited poweredDown state'</span>
+  <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'charged</span>
+
+  <span class="variable">robotManager</span>.<span class="variable">goToState</span>(<span class="string">'poweredUp.mobile'</span>)
+  <span class="comment">// logs</span>
+  <span class="comment">// 'exited charged state'</span>
+  <span class="comment">// 'exited poweredDown state'</span>
+  <span class="comment">// 'entered poweredUp state'</span>
+  <span class="comment">// 'entered mobile state'</span>
+</code></pre>
+
+<p>During development you can set a StateManager's <code class='syntax js'><span class="variable">enableLogging</span></code> property to <code class='syntax js'><span class="variable">true</span></code> to
+receive console messages of state transitions.</p>
+
+<pre><code class='syntax js'><span class="variable">robotManager</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+    <span class="variable">enableLogging</span>: <span class="variable">true</span>
+  })
+</code></pre>
+
+<h2 id="managingcurrentstatewithactions">Managing <code class='syntax js'><span class="variable">currentState</span></code> with Actions</h2>
+
+<p>To control which transitions between states are possible for a given state, StateManager
+can receive and route action messages to its states via the <code class='syntax js'><span class="variable">send</span></code> method.  Calling to <code class='syntax js'><span class="variable">send</span></code> with
+an action name will begin searching for a method with the same name starting at the current state
+and moving up through the parent states in a state hierarchy until an appropriate method is found
+or the StateManager instance itself is reached. </p>
+
+<p>If an appropriately named method is found it will be called with the state manager as the first
+argument and an optional <code class='syntax js'><span class="variable">context</span></code> object as the second argument.</p>
+
+<pre><code class='syntax js'><span class="variable">managerA</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">initialState</span>: <span class="string">'stateOne.substateOne.subsubstateOne'</span>,
+  <span class="variable">stateOne</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+    <span class="variable">substateOne</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+      <span class="variable">anAction</span>: <span class="keyword">function</span>(<span class="variable">manager</span>, <span class="variable">context</span>){
+        <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;an action was called&quot;</span>)
+      },
+      <span class="variable">subsubstateOne</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({})
+    })
+  })
+})
+
+<span class="variable">managerA</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'subsubstateOne'</span>
+<span class="variable">managerA</span>.<span class="variable">send</span>(<span class="string">'anAction'</span>)
+<span class="comment">// 'stateOne.substateOne.subsubstateOne' has no anAction method</span>
+<span class="comment">// so the 'anAction' method of 'stateOne.substateOne' is called</span>
+<span class="comment">// and logs &quot;an action was called&quot;</span>
+<span class="comment">// with managerA as the first argument</span>
+<span class="comment">// and no second argument</span>
+
+ <span class="variable">someObject</span> = {}
+ <span class="variable">managerA</span>.<span class="variable">send</span>(<span class="string">'anAction'</span>, <span class="variable">someObject</span>)
+ <span class="comment">// the 'anAction' method of 'stateOne.substateOne' is called again</span>
+ <span class="comment">// with managerA as the first argument and</span>
+ <span class="comment">// someObject as the second argument.</span>
+</code></pre>
+
+<p>If the StateManager attempts to send an action but does not find an appropriately named
+method in the current state or while moving upwards through the state hierarchy
+it will throw a new <code class='syntax js'><span class="class">Ember</span>.<span class="class">Error</span>.</code> Action detection only moves upwards through the state hierarchy
+from the current state. It does not search in other portions of the hierarchy.</p>
+
+<pre><code class='syntax js'><span class="variable">managerB</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+    <span class="variable">initialState</span>: <span class="string">'stateOne.substateOne.subsubstateOne'</span>,
+    <span class="variable">stateOne</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+      <span class="variable">substateOne</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+        <span class="variable">subsubstateOne</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({})
+      })
+    }),
+    <span class="variable">stateTwo</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+     <span class="variable">anAction</span>: <span class="keyword">function</span>(<span class="variable">manager</span>, <span class="variable">context</span>){
+       <span class="comment">// will not be called below because it is</span>
+       <span class="comment">// not a parent of the current state</span>
+     }
+    })
+  })
+
+  <span class="variable">managerB</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'subsubstateOne'</span>
+  <span class="variable">managerB</span>.<span class="variable">send</span>(<span class="string">'anAction'</span>)
+  <span class="comment">// Error: &lt;Ember.StateManager:ember132&gt; could not</span>
+  <span class="comment">// respond to event anAction in state stateOne.substateOne.subsubstateOne.</span>
+</code></pre>
+
+<p>Inside of an action method the given state should delegate <code class='syntax js'><span class="variable">goToState</span></code> calls on its
+StateManager.</p>
+
+<pre><code class='syntax js'><span class="variable">robotManager</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+    <span class="variable">initialState</span>: <span class="string">'poweredDown.charging'</span>,
+     <span class="variable">poweredDown</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+       <span class="variable">charging</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+          <span class="variable">chargeComplete</span>: <span class="keyword">function</span>(<span class="variable">manager</span>, <span class="variable">context</span>){
+            <span class="variable">manager</span>.<span class="variable">goToState</span>(<span class="string">'charged'</span>)
+          }
+       }),
+       <span class="variable">charged</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+         <span class="variable">boot</span>: <span class="keyword">function</span>(<span class="variable">manager</span>, <span class="variable">context</span>){
+            <span class="variable">manager</span>.<span class="variable">goToState</span>(<span class="string">'poweredUp'</span>)
+         }
+       })
+     }),
+     <span class="variable">poweredUp</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+       <span class="variable">beginExtermination</span>: <span class="keyword">function</span>(<span class="variable">manager</span>, <span class="variable">context</span>){
+          <span class="variable">manager</span>.<span class="variable">goToState</span>(<span class="string">'rampaging'</span>)
+       },
+       <span class="variable">rampaging</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>()
+     })
+   })
+
+   <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'charging'</span>
+   <span class="variable">robotManager</span>.<span class="variable">send</span>(<span class="string">'boot'</span>) <span class="comment">// throws error, no boot action  </span>
+                             <span class="comment">// in current hierarchy</span>
+   <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// remains 'charging'</span>
+
+   <span class="variable">robotManager</span>.<span class="variable">send</span>(<span class="string">'beginExtermination'</span>) <span class="comment">// throws error, no beginExtermination</span>
+                                           <span class="comment">// action in current hierarchy</span>
+   <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// remains 'charging'</span>
+
+   <span class="variable">robotManager</span>.<span class="variable">send</span>(<span class="string">'chargeComplete'</span>)
+   <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'charged'</span>
+
+   <span class="variable">robotManager</span>.<span class="variable">send</span>(<span class="string">'boot'</span>)
+   <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'poweredUp'</span>
+
+   <span class="variable">robotManager</span>.<span class="variable">send</span>(<span class="string">'beginExtermination'</span>, <span class="variable">allHumans</span>)
+   <span class="variable">robotManager</span>.<span class="variable">getPath</span>(<span class="string">'currentState.name'</span>) <span class="comment">// 'rampaging'</span>
+</code></pre>
+
+<h2 id="interactionswithembersviewsystem">Interactions with Ember's View System.</h2>
+
+<p>When combined with instances of <code class='syntax js'><span class="class">Ember</span>.<span class="class">ViewState</span></code>, StateManager is designed to 
+interact with Ember's view system to control which views are added to 
+and removed from the DOM based on the manager's current state.</p>
+
+<p>By default, a StateManager will manage views inside the 'body' element. This can be
+customized by setting the <code class='syntax js'><span class="variable">rootElement</span></code> property to a CSS selector of an existing 
+HTML element you would prefer to receive view rendering.</p>
+
+<pre><code class='syntax js'><span class="variable">viewStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">rootElement</span>: <span class="string">'#some-other-element'</span>
+})
+</code></pre>
+
+<p>You can also specify a particular instance of <code class='syntax js'><span class="class">Ember</span>.<span class="class">ContainerView</span></code> you would like to receive
+view rendering by setting the <code class='syntax js'><span class="variable">rootView</span></code> property. You will be responsible for placing
+this element into the DOM yourself.</p>
+
+<pre><code class='syntax js'><span class="variable">aLayoutView</span> = <span class="class">Ember</span>.<span class="class">ContainerView</span>.<span class="variable">create</span>()
+
+<span class="comment">// make sure this view instance is added to the browser</span>
+<span class="variable">aLayoutView</span>.<span class="variable">appendTo</span>(<span class="string">'body'</span>) 
+
+<span class="class">App</span>.<span class="variable">viewStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">rootView</span>: <span class="variable">aLayoutView</span>
+})
+</code></pre>
+
+<p>Once you have an instance of StateManager controlling a view, you can provide states
+that are instances of <code class='syntax js'><span class="class">Ember</span>.<span class="class">ViewState</span></code>.  When the StateManager enters a state
+that is an instance of <code class='syntax js'><span class="class">Ember</span>.<span class="class">ViewState</span></code> that <code class='syntax js'><span class="class">ViewState</span></code>'s <code class='syntax js'><span class="variable">view</span></code> property will be
+instantiated and inserted into the StateManager's <code class='syntax js'><span class="variable">rootView</span></code> or <code class='syntax js'><span class="variable">rootElement</span></code>.
+When a state is exited, the <code class='syntax js'><span class="class">ViewState</span></code>'s view will be removed from the StateManager's
+view.</p>
+
+<pre><code class='syntax js'><span class="class">ContactListView</span> = <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({
+  <span class="variable">classNames</span>: [<span class="string">'my-contacts-css-class'</span>],
+  <span class="variable">defaultTemplate</span>: <span class="class">Ember</span>.<span class="class">Handlebars</span>.<span class="variable">compile</span>(<span class="string">'&lt;h2&gt;People&lt;/h2&gt;'</span>)
+})
+
+<span class="class">PhotoListView</span> = <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({
+  <span class="variable">classNames</span>: [<span class="string">'my-photos-css-class'</span>],
+  <span class="variable">defaultTemplate</span>: <span class="class">Ember</span>.<span class="class">Handlebars</span>.<span class="variable">compile</span>(<span class="string">'&lt;h2&gt;Photos&lt;/h2&gt;'</span>)
+})
+
+<span class="variable">viewStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">showingPeople</span>: <span class="class">Ember</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">ContactListView</span>
+  }),
+  <span class="variable">showingPhotos</span>: <span class="class">Ember</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">PhotoListView</span>
+  })
+})
+
+<span class="variable">viewStates</span>.<span class="variable">goToState</span>(<span class="string">'showingPeople'</span>)
+</code></pre>
+
+<p>The above code will change the rendered HTML from</p>
+
+<pre><code class='syntax js'>&lt;<span class="variable">body</span>&gt;&lt;/<span class="variable">body</span>&gt;
+</code></pre>
+
+<p>to</p>
+
+<pre><code class='syntax js'>&lt;<span class="variable">body</span>&gt;
+  &lt;<span class="variable">div</span> <span class="variable">id</span>=<span class="string">&quot;ember1&quot;</span> <span class="keyword">class</span>=<span class="string">&quot;ember-view my-contacts-css-class&quot;</span>&gt;
+    &lt;<span class="variable">h2</span>&gt;<span class="class">People</span>&lt;/<span class="variable">h2</span>&gt;
+  &lt;/<span class="variable">div</span>&gt;
+&lt;/<span class="variable">body</span>&gt;
+</code></pre>
+
+<p>Changing the current state via <code class='syntax js'><span class="variable">goToState</span></code> from <code class='syntax js'><span class="variable">showingPeople</span></code> to
+<code class='syntax js'><span class="variable">showingPhotos</span></code> will remove the <code class='syntax js'><span class="variable">showingPeople</span></code> view and add the <code class='syntax js'><span class="variable">showingPhotos</span></code> view:</p>
+
+<pre><code class='syntax js'><span class="variable">viewStates</span>.<span class="variable">goToState</span>(<span class="string">'showingPhotos'</span>)
+</code></pre>
+
+<p>will change the rendered HTML to</p>
+
+<pre><code class='syntax js'>&lt;<span class="variable">body</span>&gt;
+  &lt;<span class="variable">div</span> <span class="variable">id</span>=<span class="string">&quot;ember2&quot;</span> <span class="keyword">class</span>=<span class="string">&quot;ember-view my-photos-css-class&quot;</span>&gt;
+    &lt;<span class="variable">h2</span>&gt;<span class="class">Photos</span>&lt;/<span class="variable">h2</span>&gt;
+  &lt;/<span class="variable">div</span>&gt;
+&lt;/<span class="variable">body</span>&gt;
+</code></pre>
+
+<p>When entering nested <code class='syntax js'><span class="class">ViewState</span></code>s, each state's view will be draw into the the StateManager's
+<code class='syntax js'><span class="variable">rootView</span></code> or <code class='syntax js'><span class="variable">rootElement</span></code> as siblings.</p>
+
+<pre><code class='syntax js'><span class="class">ContactListView</span> = <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({
+  <span class="variable">classNames</span>: [<span class="string">'my-contacts-css-class'</span>],
+  <span class="variable">defaultTemplate</span>: <span class="class">Ember</span>.<span class="class">Handlebars</span>.<span class="variable">compile</span>(<span class="string">'&lt;h2&gt;People&lt;/h2&gt;'</span>)
+})
+
+<span class="class">EditAContactView</span> = <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({
+  <span class="variable">classNames</span>: [<span class="string">'editing-a-contact-css-class'</span>],
+  <span class="variable">defaultTemplate</span>: <span class="class">Ember</span>.<span class="class">Handlebars</span>.<span class="variable">compile</span>(<span class="string">'Editing...'</span>)
+})
+
+<span class="variable">viewStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">showingPeople</span>: <span class="class">Ember</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">ContactListView</span>,
+
+    <span class="variable">withEditingPanel</span>: <span class="class">Ember</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+      <span class="variable">view</span>: <span class="class">EditAContactView</span>
+    })
+  })
+})
+
+
+<span class="variable">viewStates</span>.<span class="variable">goToState</span>(<span class="string">'showingPeople.withEditingPanel'</span>)
+</code></pre>
+
+<p>Will result in the following rendered HTML:</p>
+
+<pre><code class='syntax js'>&lt;<span class="variable">body</span>&gt;
+  &lt;<span class="variable">div</span> <span class="variable">id</span>=<span class="string">&quot;ember2&quot;</span> <span class="keyword">class</span>=<span class="string">&quot;ember-view my-contacts-css-class&quot;</span>&gt;
+    &lt;<span class="variable">h2</span>&gt;<span class="class">People</span>&lt;/<span class="variable">h2</span>&gt;
+  &lt;/<span class="variable">div</span>&gt;
+
+  &lt;<span class="variable">div</span> <span class="variable">id</span>=<span class="string">&quot;ember2&quot;</span> <span class="keyword">class</span>=<span class="string">&quot;ember-view editing-a-contact-css-class&quot;</span>&gt;
+    <span class="class">Editing</span>...
+  &lt;/<span class="variable">div</span>&gt;
+&lt;/<span class="variable">body</span>&gt;
+</code></pre>
+
+<p>ViewState views are added and removed from their StateManager's view via their
+<code class='syntax js'><span class="variable">enter</span></code> and <code class='syntax js'><span class="variable">exit</span></code> methods. If you need to override these methods, be sure to call
+<code class='syntax js'><span class="variable">_super</span></code> to maintain the adding and removing behavior:</p>
+
+<pre><code class='syntax js'><span class="variable">viewStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">aState</span>: <span class="class">Ember</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({}),
+    <span class="variable">enter</span>: <span class="keyword">function</span>(<span class="variable">manager</span>, <span class="variable">transition</span>){
+      <span class="comment">// calling _super ensures this view will be</span>
+      <span class="comment">// properly inserted</span>
+      <span class="this">this</span>.<span class="variable">_super</span>();
+
+      <span class="comment">// now you can do other things</span>
+    }
+  })
+})
+</code></pre>
+
+<h2 id="managingmultiplesectionsofapagewithstates">Managing Multiple Sections of A Page With States</h2>
+
+<p>Multiple StateManagers can be combined to control multiple areas of an application's rendered views.
+Given the following HTML body:</p>
+
+<pre><code class='syntax js'>&lt;<span class="variable">body</span>&gt;
+  &lt;<span class="variable">div</span> <span class="variable">id</span>=<span class="string">'sidebar-nav'</span>&gt;
+  &lt;/<span class="variable">div</span>&gt;
+  &lt;<span class="variable">div</span> <span class="variable">id</span>=<span class="string">'content-area'</span>&gt;
+  &lt;/<span class="variable">div</span>&gt;
+&lt;/<span class="variable">body</span>&gt;
+</code></pre>
+
+<p>You could separately manage view state for each section with two StateManagers</p>
+
+<pre><code class='syntax js'><span class="variable">navigationStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">rootElement</span>: <span class="string">'#sidebar-nav'</span>,
+  <span class="variable">userAuthenticated</span>: <span class="class">Em</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({})
+  }),
+  <span class="variable">userNotAuthenticated</span>: <span class="class">Em</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({})
+  })
+})
+
+<span class="variable">contentStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">rootElement</span>: <span class="string">'#content-area'</span>,
+  <span class="variable">books</span>: <span class="class">Em</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({})
+  }),
+  <span class="variable">music</span>: <span class="class">Em</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({})
+  })
+})
+</code></pre>
+
+<p>If you prefer to start with an empty body and manage state programmatically you
+can also take advantage of StateManager's <code class='syntax js'><span class="variable">rootView</span></code> property and the ability of 
+<code class='syntax js'><span class="class">Ember</span>.<span class="class">ContainerView</span></code>s to manually manage their child views. </p>
+
+<pre><code class='syntax js'><span class="variable">dashboard</span> = <span class="class">Ember</span>.<span class="class">ContainerView</span>.<span class="variable">create</span>({
+  <span class="variable">childViews</span>: [<span class="string">'navigationAreaView'</span>, <span class="string">'contentAreaView'</span>],
+  <span class="variable">navigationAreaView</span>: <span class="class">Ember</span>.<span class="class">ContainerView</span>.<span class="variable">create</span>({}),
+  <span class="variable">contentAreaView</span>: <span class="class">Ember</span>.<span class="class">ContainerView</span>.<span class="variable">create</span>({})
+})
+
+<span class="variable">navigationStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">rootView</span>: <span class="variable">dashboard</span>.<span class="variable">get</span>(<span class="string">'navigationAreaView'</span>),
+  <span class="variable">userAuthenticated</span>: <span class="class">Em</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({})
+  }),
+  <span class="variable">userNotAuthenticated</span>: <span class="class">Em</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({})
+  })
+})
+
+<span class="variable">contentStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">rootView</span>: <span class="variable">dashboard</span>.<span class="variable">get</span>(<span class="string">'contentAreaView'</span>),
+  <span class="variable">books</span>: <span class="class">Em</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({})
+  }),
+  <span class="variable">music</span>: <span class="class">Em</span>.<span class="class">ViewState</span>.<span class="variable">create</span>({
+    <span class="variable">view</span>: <span class="class">Ember</span>.<span class="class">View</span>.<span class="variable">extend</span>({})
+  })
+})
+
+<span class="variable">dashboard</span>.<span class="variable">appendTo</span>(<span class="string">'body'</span>)
+</code></pre>
+
+<h2 id="usermanipulationofstateviaactionhelpers">User Manipulation of State via <code class='syntax js'>{{<span class="variable">action</span>}}</code> Helpers</h2>
+
+<p>The Handlebars <code class='syntax js'>{{<span class="variable">action</span>}}</code> helper is StateManager-aware and will use StateManager action sending 
+to connect user interaction to action-based state transitions.</p>
+
+<p>Given the following body and handlebars template</p>
+
+<pre><code class='syntax js'>&lt;<span class="variable">body</span>&gt;
+  &lt;<span class="variable">script</span> <span class="variable">type</span>=<span class="string">'text/x-handlebars'</span>&gt;
+    &lt;<span class="variable">a</span> <span class="variable">href</span>=<span class="string">&quot;#&quot;</span> {{<span class="variable">action</span> <span class="string">&quot;anAction&quot;</span> <span class="variable">target</span>=<span class="string">&quot;App.appStates&quot;</span>}}&gt; <span class="class">Go</span> &lt;/<span class="variable">a</span>&gt;
+  &lt;/<span class="variable">script</span>&gt;
+&lt;/<span class="variable">body</span>&gt;
+</code></pre>
+
+<p>And application code</p>
+
+<pre><code class='syntax js'><span class="class">App</span> = <span class="class">Ember</span>.<span class="class">Application</span>.<span class="variable">create</span>()
+<span class="class">App</span>.<span class="variable">appStates</span> = <span class="class">Ember</span>.<span class="class">StateManager</span>.<span class="variable">create</span>({
+  <span class="variable">initialState</span>: <span class="string">'aState'</span>,
+  <span class="variable">aState</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({
+    <span class="variable">anAction</span>: <span class="keyword">function</span>(<span class="variable">manager</span>, <span class="variable">context</span>){}
+  }),
+  <span class="variable">bState</span>: <span class="class">Ember</span>.<span class="class">State</span>.<span class="variable">create</span>({})
+})
+</code></pre>
+
+<p>A user initiated click or touch event on "Go" will trigger the 'anAction' method of
+<code class='syntax js'><span class="class">App</span>.<span class="variable">appStates</span>.<span class="variable">aState</span></code> with <code class='syntax js'><span class="class">App</span>.<span class="variable">appStates</span></code> as the first argument and a
+<code class='syntax js'><span class="variable">jQuery</span>.<span class="class">Event</span></code> object as the second object. The <code class='syntax js'><span class="variable">jQuery</span>.<span class="class">Event</span></code> will include a property
+<code class='syntax js'><span class="variable">view</span></code> that references the <code class='syntax js'><span class="class">Ember</span>.<span class="class">View</span></code> object that was interacted with.</p>
+
+          
+            <span class="definedin">Defined in: <a href="../symbols/src/packages_ember-states_lib_state_manager.js.html">state_manager.js</a>.</span>
+          
+        </p>
+
+
+<!-- ============================== properties summary ===================== -->
+      
+      
+
+
+
+
+<!-- ============================== methods summary ======================== -->
+      
+      
+        
+        
+      
+        
+        
+      
+<!-- ============================== events summary ======================== -->
+      
+
+
+
+<!-- ============================== field details ========================== -->
+      
+
+
+<!-- ============================== method details ========================= -->
+      
+        
+        
+      
+        
+        
+      
+
+<!-- ============================== event details ========================= -->
+      
+
+
+
+<!-- ============================== footer ================================= -->
+        <div class="fineprint" style="clear:both">
+          
+          Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Sep 17 2013 14:59:52 GMT-0400 (EDT)
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

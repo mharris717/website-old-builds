@@ -1,0 +1,312 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">// ==========================================================================</span><span class="WHIT">
+<span class='line'>  2</span> </span><span class="COMM">// Project:   Ember - JavaScript Application Framework</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">// Copyright: ©2006-2011 Strobe Inc. and contributors.</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="COMM">//            Portions ©2008-2011 Apple Inc. All rights reserved.</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="COMM">// License:   Licensed under MIT license (see license.js)</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="COMM">// ==========================================================================</span><span class="WHIT">
+<span class='line'>  7</span> 
+<span class='line'>  8</span> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'ember-views/views/container_view'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'ember-runtime/system/string'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 10</span> 
+<span class='line'> 11</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.get</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">set</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.set</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fmt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.String.fmt</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 12</span> 
+<span class='line'> 13</span> </span><span class="COMM">/**
+<span class='line'> 14</span>   @class
+<span class='line'> 15</span>   @since Ember 0.9
+<span class='line'> 16</span>   @extends Ember.ContainerView
+<span class='line'> 17</span>   
+<span class='line'> 18</span>   `Ember.CollectionView` is an `Ember.View` descendent responsible for managing a
+<span class='line'> 19</span>   collection (an array or array-like object) by maintaing a child view object and 
+<span class='line'> 20</span>   associated DOM representation for each item in the array and ensuring that child
+<span class='line'> 21</span>   views and their associated rendered HTML are updated when items in the array
+<span class='line'> 22</span>   are added, removed, or replaced.
+<span class='line'> 23</span> 
+<span class='line'> 24</span>   ## Setting content
+<span class='line'> 25</span>   The managed collection of objects is referenced as the `Ember.CollectionView` instance's
+<span class='line'> 26</span>   `content` property.
+<span class='line'> 27</span> 
+<span class='line'> 28</span>       someItemsView = Ember.CollectionView.create({
+<span class='line'> 29</span>         content: ['A', 'B','C']
+<span class='line'> 30</span>       })
+<span class='line'> 31</span> 
+<span class='line'> 32</span>   The view for each item in the collection will have its `content` property set
+<span class='line'> 33</span>   to the item.
+<span class='line'> 34</span> 
+<span class='line'> 35</span>   ## Specifying itemViewClass
+<span class='line'> 36</span>   By default the view class for each item in the managed collection will be an instance
+<span class='line'> 37</span>   of `Ember.View`. You can supply a different class by setting the `CollectionView`'s
+<span class='line'> 38</span>   `itemViewClass` property.
+<span class='line'> 39</span> 
+<span class='line'> 40</span>   Given an empty `&lt;body>` and the following code:
+<span class='line'> 41</span> 
+<span class='line'> 42</span> 
+<span class='line'> 43</span>         someItemsView = Ember.CollectionView.create({
+<span class='line'> 44</span>           classNames: ['a-collection'],
+<span class='line'> 45</span>           content: ['A','B','C'],
+<span class='line'> 46</span>           itemViewClass: Ember.View.extend({
+<span class='line'> 47</span>             template: Ember.Handlebars.compile("the letter: {{content}}")
+<span class='line'> 48</span>           })
+<span class='line'> 49</span>         })
+<span class='line'> 50</span> 
+<span class='line'> 51</span>         someItemsView.appendTo('body')
+<span class='line'> 52</span> 
+<span class='line'> 53</span>   Will result in the following HTML structure
+<span class='line'> 54</span> 
+<span class='line'> 55</span>         &lt;div class="ember-view a-collection">
+<span class='line'> 56</span>           &lt;div class="ember-view">the letter: A&lt;/div>
+<span class='line'> 57</span>           &lt;div class="ember-view">the letter: B&lt;/div>
+<span class='line'> 58</span>           &lt;div class="ember-view">the letter: C&lt;/div>
+<span class='line'> 59</span>         &lt;/div>
+<span class='line'> 60</span> 
+<span class='line'> 61</span> 
+<span class='line'> 62</span>   ## Automatic matching of parent/child tagNames
+<span class='line'> 63</span>   Setting the `tagName` property of a `CollectionView` to any of 
+<span class='line'> 64</span>   "ul", "ol", "table", "thead", "tbody", "tfoot", "tr", or "select" will result
+<span class='line'> 65</span>   in the item views receiving an appropriately matched `tagName` property.
+<span class='line'> 66</span> 
+<span class='line'> 67</span> 
+<span class='line'> 68</span>   Given an empty `&lt;body>` and the following code:
+<span class='line'> 69</span> 
+<span class='line'> 70</span>         anUndorderedListView = Ember.CollectionView.create({
+<span class='line'> 71</span>           tagName: 'ul',
+<span class='line'> 72</span>           content: ['A','B','C'],
+<span class='line'> 73</span>           itemViewClass: Ember.View.extend({
+<span class='line'> 74</span>             template: Ember.Handlebars.compile("the letter: {{content}}")
+<span class='line'> 75</span>           })
+<span class='line'> 76</span>         })
+<span class='line'> 77</span> 
+<span class='line'> 78</span>         anUndorderedListView.appendTo('body')
+<span class='line'> 79</span> 
+<span class='line'> 80</span>   Will result in the following HTML structure
+<span class='line'> 81</span> 
+<span class='line'> 82</span>         &lt;ul class="ember-view a-collection">
+<span class='line'> 83</span>           &lt;li class="ember-view">the letter: A&lt;/li>
+<span class='line'> 84</span>           &lt;li class="ember-view">the letter: B&lt;/li>
+<span class='line'> 85</span>           &lt;li class="ember-view">the letter: C&lt;/li>
+<span class='line'> 86</span>         &lt;/ul>
+<span class='line'> 87</span> 
+<span class='line'> 88</span>   Additional tagName pairs can be provided by adding to `Ember.CollectionView.CONTAINER_MAP `
+<span class='line'> 89</span> 
+<span class='line'> 90</span>         Ember.CollectionView.CONTAINER_MAP['article'] = 'section'
+<span class='line'> 91</span> 
+<span class='line'> 92</span> 
+<span class='line'> 93</span>   ## Empty View
+<span class='line'> 94</span>   You can provide an `Ember.View` subclass to the `Ember.CollectionView` instance as its
+<span class='line'> 95</span>   `emptyView` property. If the `content` property of a `CollectionView` is set to `null`
+<span class='line'> 96</span>   or an empty array, an instance of this view will be the `CollectionView`s only child.
+<span class='line'> 97</span> 
+<span class='line'> 98</span>         aListWithNothing = Ember.CollectionView.create({
+<span class='line'> 99</span>           classNames: ['nothing']
+<span class='line'>100</span>           content: null,
+<span class='line'>101</span>           emptyView: Ember.View.extend({
+<span class='line'>102</span>             template: Ember.Handlebars.compile("The collection is empty")
+<span class='line'>103</span>           })
+<span class='line'>104</span>         })
+<span class='line'>105</span> 
+<span class='line'>106</span>         aListWithNothing.appendTo('body')
+<span class='line'>107</span> 
+<span class='line'>108</span>   Will result in the following HTML structure
+<span class='line'>109</span> 
+<span class='line'>110</span>         &lt;div class="ember-view nothing">
+<span class='line'>111</span>           &lt;div class="ember-view">
+<span class='line'>112</span>             The collection is empty
+<span class='line'>113</span>           &lt;/div>
+<span class='line'>114</span>         &lt;/div>
+<span class='line'>115</span> 
+<span class='line'>116</span>   ## Adding and Removing items
+<span class='line'>117</span>   The `childViews` property of a `CollectionView` should not be directly manipulated. Instead,
+<span class='line'>118</span>   add, remove, replace items from its `content` property. This will trigger
+<span class='line'>119</span>   appropriate changes to its rendered HTML.
+<span class='line'>120</span> 
+<span class='line'>121</span>   ## Use in templates via the `{{collection}}` Ember.Handlebars helper
+<span class='line'>122</span>   Ember.Handlebars provides a helper specifically for adding `CollectionView`s to templates.
+<span class='line'>123</span>   See `Ember.Handlebars.collection` for more details
+<span class='line'>124</span>   
+<span class='line'>125</span> */</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="NAME">Ember.CollectionView</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.ContainerView.extend</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="COMM">/** @scope Ember.CollectionView.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>128</span> 
+<span class='line'>129</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'>130</span>     A list of items to be displayed by the Ember.CollectionView.
+<span class='line'>131</span> 
+<span class='line'>132</span>     @type Ember.Array
+<span class='line'>133</span>     @default null
+<span class='line'>134</span>   */</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">  </span><span class="NAME">content</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>136</span> 
+<span class='line'>137</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'>138</span>     An optional view to display if content is set to an empty array.
+<span class='line'>139</span> 
+<span class='line'>140</span>     @type Ember.View
+<span class='line'>141</span>     @default null
+<span class='line'>142</span>   */</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">  </span><span class="NAME">emptyView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>144</span> 
+<span class='line'>145</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'>146</span>     @type Ember.View
+<span class='line'>147</span>     @default Ember.View
+<span class='line'>148</span>   */</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">  </span><span class="NAME">itemViewClass</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Ember.View</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>150</span> 
+<span class='line'>151</span> </span><span class="WHIT">  </span><span class="COMM">/** @private */</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">  </span><span class="NAME">init</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ret</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">    </span><span class="NAME">this._contentDidChange</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ret</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>157</span> 
+<span class='line'>158</span> </span><span class="WHIT">  </span><span class="NAME">_contentWillChange</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Ember.beforeObserver</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="STRN">'content'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> 
+<span class='line'>161</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">content.removeArrayObserver</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">len</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'length'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">    </span><span class="NAME">this.arrayWillChange</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'content'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>165</span> 
+<span class='line'>166</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'>167</span>     @private
+<span class='line'>168</span> 
+<span class='line'>169</span>     Check to make sure that the content has changed, and if so,
+<span class='line'>170</span>     update the children directly. This is always scheduled
+<span class='line'>171</span>     asynchronously, to allow the element to be created before
+<span class='line'>172</span>     bindings have synchronized and vice versa.
+<span class='line'>173</span>   */</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">  </span><span class="NAME">_contentDidChange</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Ember.observer</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'content'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> 
+<span class='line'>177</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">      </span><span class="NAME">ember_assert</span><span class="PUNC">(</span><span class="NAME">fmt</span><span class="PUNC">(</span><span class="STRN">"an Ember.CollectionView's content must implement Ember.Array. You passed %@"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">content</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Ember.Array.detect</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">      </span><span class="NAME">content.addArrayObserver</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>181</span> 
+<span class='line'>182</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">len</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'length'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">    </span><span class="NAME">this.arrayDidChange</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'content'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>185</span> 
+<span class='line'>186</span> </span><span class="WHIT">  </span><span class="NAME">willDestroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'content'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">content.removeArrayObserver</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>189</span> 
+<span class='line'>190</span> </span><span class="WHIT">    </span><span class="NAME">this._super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>192</span> 
+<span class='line'>193</span> </span><span class="WHIT">  </span><span class="NAME">arrayWillChange</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">start</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">removedCount</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">    </span><span class="COMM">// If the contents were empty before and this template collection has an</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">    </span><span class="COMM">// empty view remove it now.</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">emptyView</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'emptyView'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">emptyView</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">emptyView</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Ember.View</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">      </span><span class="NAME">emptyView.removeFromParent</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>200</span> 
+<span class='line'>201</span> </span><span class="WHIT">    </span><span class="COMM">// Loop through child views that correspond with the removed items.</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">    </span><span class="COMM">// Note that we loop from the end of the array to the beginning because</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="WHIT">    </span><span class="COMM">// we are mutating it as we go.</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">childViews</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'childViews'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">childView</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>205</span> 
+<span class='line'>206</span> </span><span class="WHIT">    </span><span class="NAME">len</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">childViews</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'length'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>207</span> 
+<span class='line'>208</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">removingAll</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">removedCount</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>209</span> 
+<span class='line'>210</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">removingAll</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>211</span> </span><span class="WHIT">      </span><span class="NAME">this.invokeForState</span><span class="PUNC">(</span><span class="STRN">'empty'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>213</span> 
+<span class='line'>214</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">start</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">removedCount</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">start</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">      </span><span class="NAME">childView</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">childViews</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">removingAll</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">childView.removedFromDOM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">      </span><span class="NAME">childView.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>220</span> 
+<span class='line'>221</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'>222</span>     Called when a mutation to the underlying content array occurs.
+<span class='line'>223</span> 
+<span class='line'>224</span>     This method will replay that mutation against the views that compose the
+<span class='line'>225</span>     Ember.CollectionView, ensuring that the view reflects the model.
+<span class='line'>226</span> 
+<span class='line'>227</span>     This array observer is added in contentDidChange.
+<span class='line'>228</span> 
+<span class='line'>229</span>     @param {Array} addedObjects
+<span class='line'>230</span>       the objects that were added to the content
+<span class='line'>231</span> 
+<span class='line'>232</span>     @param {Array} removedObjects
+<span class='line'>233</span>       the objects that were removed from the content
+<span class='line'>234</span> 
+<span class='line'>235</span>     @param {Number} changeIndex
+<span class='line'>236</span>       the index at which the changes occurred
+<span class='line'>237</span>   */</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="WHIT">  </span><span class="NAME">arrayDidChange</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">start</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">removed</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">added</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">itemViewClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'itemViewClass'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="WHIT">        </span><span class="NAME">childViews</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'childViews'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="WHIT">        </span><span class="NAME">addedViews</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">item</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">itemTagName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>242</span> 
+<span class='line'>243</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'string'</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">itemViewClass</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="WHIT">      </span><span class="NAME">itemViewClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.getPath</span><span class="PUNC">(</span><span class="NAME">itemViewClass</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>246</span> 
+<span class='line'>247</span> </span><span class="WHIT">    </span><span class="NAME">ember_assert</span><span class="PUNC">(</span><span class="NAME">fmt</span><span class="PUNC">(</span><span class="STRN">"itemViewClass must be a subclass of Ember.View, not %@"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">itemViewClass</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Ember.View.detect</span><span class="PUNC">(</span><span class="NAME">itemViewClass</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>248</span> 
+<span class='line'>249</span> </span><span class="WHIT">    </span><span class="NAME">len</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'length'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">len</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">start</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">start</span><span class="PUNC">+</span><span class="NAME">added</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">        </span><span class="NAME">item</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">content.objectAt</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>253</span> 
+<span class='line'>254</span> </span><span class="WHIT">        </span><span class="NAME">view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.createChildView</span><span class="PUNC">(</span><span class="NAME">itemViewClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">          </span><span class="NAME">content</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">item</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">          </span><span class="NAME">contentIndex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>258</span> 
+<span class='line'>259</span> </span><span class="WHIT">        </span><span class="NAME">addedViews.push</span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">emptyView</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'emptyView'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">emptyView</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>264</span> 
+<span class='line'>265</span> </span><span class="WHIT">      </span><span class="NAME">emptyView</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.createChildView</span><span class="PUNC">(</span><span class="NAME">emptyView</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">      </span><span class="NAME">addedViews.push</span><span class="PUNC">(</span><span class="NAME">emptyView</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>267</span> </span><span class="WHIT">      </span><span class="NAME">set</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'emptyView'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">emptyView</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>268</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>269</span> 
+<span class='line'>270</span> </span><span class="WHIT">    </span><span class="NAME">childViews.replace</span><span class="PUNC">(</span><span class="NAME">start</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">addedViews</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>271</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>272</span> 
+<span class='line'>273</span> </span><span class="WHIT">  </span><span class="NAME">createChildView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">attrs</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>274</span> </span><span class="WHIT">    </span><span class="NAME">view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._super</span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">attrs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>275</span> 
+<span class='line'>276</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">itemTagName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'tagName'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tagName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">itemTagName</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">itemTagName</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">Ember.CollectionView.CONTAINER_MAP</span><span class="PUNC">[</span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'tagName'</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">itemTagName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>278</span> 
+<span class='line'>279</span> </span><span class="WHIT">    </span><span class="NAME">set</span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'tagName'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">tagName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>280</span> 
+<span class='line'>281</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">view</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>282</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>283</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>284</span> 
+<span class='line'>285</span> </span><span class="COMM">/**
+<span class='line'>286</span>   @static
+<span class='line'>287</span> 
+<span class='line'>288</span>   A map of parent tags to their default child tags. You can add
+<span class='line'>289</span>   additional parent tags if you want collection views that use
+<span class='line'>290</span>   a particular parent tag to default to a child tag.
+<span class='line'>291</span> 
+<span class='line'>292</span>   @type Hash
+<span class='line'>293</span>   @constant
+<span class='line'>294</span> */</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="NAME">Ember.CollectionView.CONTAINER_MAP</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="WHIT">  </span><span class="NAME">ul</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'li'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">  </span><span class="NAME">ol</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'li'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">  </span><span class="NAME">table</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'tr'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">  </span><span class="NAME">thead</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'tr'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">  </span><span class="NAME">tbody</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'tr'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">  </span><span class="NAME">tfoot</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'tr'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>302</span> </span><span class="WHIT">  </span><span class="NAME">tr</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'td'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>303</span> </span><span class="WHIT">  </span><span class="NAME">select</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'option'</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>305</span> </span></pre></body></html>
