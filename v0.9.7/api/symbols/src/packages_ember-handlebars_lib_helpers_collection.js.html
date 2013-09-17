@@ -1,0 +1,209 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">// ==========================================================================</span><span class="WHIT">
+<span class='line'>  2</span> </span><span class="COMM">// Project:   Ember Handlebar Views</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">// Copyright: ©2011 Strobe Inc. and contributors.</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="COMM">// License:   Licensed under MIT license (see license.js)</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="COMM">// ==========================================================================</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="COMM">/*globals Handlebars ember_assert */</span><span class="WHIT">
+<span class='line'>  7</span> 
+<span class='line'>  8</span> </span><span class="COMM">// TODO: Don't require all of this module</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'ember-handlebars'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'ember-handlebars/helpers/view'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span> 
+<span class='line'> 12</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.get</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">getPath</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.Handlebars.getPath</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fmt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.String.fmt</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 13</span> 
+<span class='line'> 14</span> </span><span class="COMM">/**
+<span class='line'> 15</span>   @name Handlebars.helpers.collection
+<span class='line'> 16</span>   @param {String} path
+<span class='line'> 17</span>   @param {Hash} options
+<span class='line'> 18</span>   @returns {String} HTML string
+<span class='line'> 19</span>   
+<span class='line'> 20</span>   `{{collection}}` is a `Ember.Handlebars` helper for adding instances of
+<span class='line'> 21</span>   `Ember.CollectionView` to a template.  See `Ember.CollectionView` for additional
+<span class='line'> 22</span>   information on how a `CollectionView` functions.
+<span class='line'> 23</span> 
+<span class='line'> 24</span>   `{{collection}}`'s primary use is as a block helper with a `contentBinding` option
+<span class='line'> 25</span>   pointing towards an `Ember.Array`-compatible object.  An `Ember.View` instance will
+<span class='line'> 26</span>   be created for each item in its `content` property. Each view will have its own
+<span class='line'> 27</span>   `content` property set to the appropriate item in the collection.
+<span class='line'> 28</span> 
+<span class='line'> 29</span>   The provided block will be applied as the template for each item's view.
+<span class='line'> 30</span> 
+<span class='line'> 31</span>   Given an empty `&lt;body>` the following template:
+<span class='line'> 32</span> 
+<span class='line'> 33</span>       &lt;script type="text/x-handlebars">
+<span class='line'> 34</span>         {{#collection contentBinding="App.items"}}
+<span class='line'> 35</span>           Hi {{content.name}}
+<span class='line'> 36</span>         {{/collection}}
+<span class='line'> 37</span>       &lt;/script>
+<span class='line'> 38</span> 
+<span class='line'> 39</span>   And the following application code
+<span class='line'> 40</span> 
+<span class='line'> 41</span>       App = Ember.Application.create()
+<span class='line'> 42</span>       App.items = [
+<span class='line'> 43</span>         Ember.Object.create({name: 'Dave'}),
+<span class='line'> 44</span>         Ember.Object.create({name: 'Mary'}),
+<span class='line'> 45</span>         Ember.Object.create({name: 'Sara'})
+<span class='line'> 46</span>       ]
+<span class='line'> 47</span> 
+<span class='line'> 48</span>   Will result in the HTML structure below
+<span class='line'> 49</span> 
+<span class='line'> 50</span>       &lt;div class="ember-view">
+<span class='line'> 51</span>         &lt;div class="ember-view">Hi Dave&lt;/div>
+<span class='line'> 52</span>         &lt;div class="ember-view">Hi Mary&lt;/div>
+<span class='line'> 53</span>         &lt;div class="ember-view">Hi Sara&lt;/div>
+<span class='line'> 54</span>       &lt;/div>
+<span class='line'> 55</span> 
+<span class='line'> 56</span>   ### Blockless Use
+<span class='line'> 57</span>   If you provide an `itemViewClass` option that has its own `template` you can omit
+<span class='line'> 58</span>   the block.
+<span class='line'> 59</span> 
+<span class='line'> 60</span>   The following template:
+<span class='line'> 61</span> 
+<span class='line'> 62</span>       &lt;script type="text/x-handlebars">
+<span class='line'> 63</span>         {{collection contentBinding="App.items" itemViewClass="App.AnItemView"}}
+<span class='line'> 64</span>       &lt;/script>
+<span class='line'> 65</span> 
+<span class='line'> 66</span>   And application code
+<span class='line'> 67</span> 
+<span class='line'> 68</span>       App = Ember.Application.create()
+<span class='line'> 69</span>       App.items = [
+<span class='line'> 70</span>         Ember.Object.create({name: 'Dave'}),
+<span class='line'> 71</span>         Ember.Object.create({name: 'Mary'}),
+<span class='line'> 72</span>         Ember.Object.create({name: 'Sara'})
+<span class='line'> 73</span>       ]
+<span class='line'> 74</span> 
+<span class='line'> 75</span>       App.AnItemView = Ember.View.extend({
+<span class='line'> 76</span>         template: Ember.Handlebars.compile("Greetings {{content.name}}")
+<span class='line'> 77</span>       })
+<span class='line'> 78</span> 
+<span class='line'> 79</span>   Will result in the HTML structure below
+<span class='line'> 80</span> 
+<span class='line'> 81</span>       &lt;div class="ember-view">
+<span class='line'> 82</span>         &lt;div class="ember-view">Greetings Dave&lt;/div>
+<span class='line'> 83</span>         &lt;div class="ember-view">Greetings Mary&lt;/div>
+<span class='line'> 84</span>         &lt;div class="ember-view">Greetings Sara&lt;/div>
+<span class='line'> 85</span>       &lt;/div>
+<span class='line'> 86</span> 
+<span class='line'> 87</span>   ### Specifying a CollectionView subclass
+<span class='line'> 88</span>   By default the `{{collection}}` helper will create an instance of `Ember.CollectionView`.
+<span class='line'> 89</span>   You can supply a `Ember.CollectionView` subclass to the helper by passing it
+<span class='line'> 90</span>   as the first argument:
+<span class='line'> 91</span> 
+<span class='line'> 92</span>       &lt;script type="text/x-handlebars">
+<span class='line'> 93</span>         {{#collection App.MyCustomCollectionClass contentBinding="App.items"}}
+<span class='line'> 94</span>           Hi {{content.name}}
+<span class='line'> 95</span>         {{/collection}}
+<span class='line'> 96</span>       &lt;/script>
+<span class='line'> 97</span> 
+<span class='line'> 98</span> 
+<span class='line'> 99</span>   ### Forwarded `item.*`-named Options
+<span class='line'>100</span>   As with the `{{view}}`, helper options passed to the `{{collection}}` will be set on
+<span class='line'>101</span>   the resulting `Ember.CollectionView` as properties. Additionally, options prefixed with
+<span class='line'>102</span>   `item` will be applied to the views rendered for each item (note the camelcasing):
+<span class='line'>103</span> 
+<span class='line'>104</span>         &lt;script type="text/x-handlebars">
+<span class='line'>105</span>           {{#collection contentBinding="App.items"
+<span class='line'>106</span>                         itemTagName="p"
+<span class='line'>107</span>                         itemClassNames="greeting"}}
+<span class='line'>108</span>             Howdy {{content.name}}
+<span class='line'>109</span>           {{/collection}}
+<span class='line'>110</span>         &lt;/script>
+<span class='line'>111</span> 
+<span class='line'>112</span>   Will result in the following HTML structure:
+<span class='line'>113</span> 
+<span class='line'>114</span>       &lt;div class="ember-view">
+<span class='line'>115</span>         &lt;p class="ember-view greeting">Howdy Dave&lt;/p>
+<span class='line'>116</span>         &lt;p class="ember-view greeting">Howdy Mary&lt;/p>
+<span class='line'>117</span>         &lt;p class="ember-view greeting">Howdy Sara&lt;/p>
+<span class='line'>118</span>       &lt;/div>
+<span class='line'>119</span>   
+<span class='line'>120</span>   
+<span class='line'>121</span> */</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="NAME">Ember.Handlebars.registerHelper</span><span class="PUNC">(</span><span class="STRN">'collection'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">path</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">  </span><span class="COMM">// If no path is provided, treat path param as options.</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">path.data</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">path.data.isRenderData</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">    </span><span class="NAME">options</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">path</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">    </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">    </span><span class="NAME">ember_assert</span><span class="PUNC">(</span><span class="STRN">"You cannot pass more than one argument to the collection helper"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments.length</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">    </span><span class="NAME">ember_assert</span><span class="PUNC">(</span><span class="STRN">"You cannot pass more than one argument to the collection helper"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments.length</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>131</span> 
+<span class='line'>132</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">options.fn</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">options.data</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">inverse</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">options.inverse</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>135</span> 
+<span class='line'>136</span> </span><span class="WHIT">  </span><span class="COMM">// If passed a path string, convert that into an object.</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">  </span><span class="COMM">// Otherwise, just default to the standard class.</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">collectionClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">  </span><span class="NAME">collectionClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">getPath</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">path</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Ember.CollectionView</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">  </span><span class="NAME">ember_assert</span><span class="PUNC">(</span><span class="NAME">fmt</span><span class="PUNC">(</span><span class="STRN">"%@ #collection: Could not find %@"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data.view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">path</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="PUNC">!</span><span class="NAME">collectionClass</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span> 
+<span class='line'>142</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">options.hash</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">itemHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">match</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>143</span> 
+<span class='line'>144</span> </span><span class="WHIT">  </span><span class="COMM">// Extract item view class if provided else default to the standard class</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">itemViewClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">itemViewPath</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hash.itemViewClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">collectionPrototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">collectionClass.proto</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">  </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">hash.itemViewClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">  </span><span class="NAME">itemViewClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">itemViewPath</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">getPath</span><span class="PUNC">(</span><span class="NAME">collectionPrototype</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">itemViewPath</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">collectionPrototype.itemViewClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">  </span><span class="NAME">ember_assert</span><span class="PUNC">(</span><span class="NAME">fmt</span><span class="PUNC">(</span><span class="STRN">"%@ #collection: Could not find %@"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data.view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">itemViewPath</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="PUNC">!</span><span class="NAME">itemViewClass</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>150</span> 
+<span class='line'>151</span> </span><span class="WHIT">  </span><span class="COMM">// Go through options passed to the {{collection}} helper and extract options</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">  </span><span class="COMM">// that configure item views instead of the collection itself.</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prop</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hash.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">prop</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">      </span><span class="NAME">match</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">prop.match</span><span class="PUNC">(</span><span class="REGX">/^item(.)(.*)$/</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>156</span> 
+<span class='line'>157</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">match</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">        </span><span class="COMM">// Convert itemShouldFoo -> shouldFoo</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">        </span><span class="NAME">itemHash</span><span class="PUNC">[</span><span class="NAME">match</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">match</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="PUNC">[</span><span class="NAME">prop</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">        </span><span class="COMM">// Delete from hash as this will end up getting passed to the</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">        </span><span class="COMM">// {{view}} helper method.</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">        </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="PUNC">[</span><span class="NAME">prop</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>166</span> 
+<span class='line'>167</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tagName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hash.tagName</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">collectionPrototype.tagName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>168</span> 
+<span class='line'>169</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="WHIT">    </span><span class="NAME">itemHash.template</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">    </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">options.fn</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>173</span> 
+<span class='line'>174</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">inverse</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">inverse</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">Handlebars.VM.noop</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">emptyViewClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.View</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> 
+<span class='line'>177</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hash.emptyViewClass</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">      </span><span class="NAME">emptyViewClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.View.detect</span><span class="PUNC">(</span><span class="NAME">hash.emptyViewClass</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">                          </span><span class="NAME">hash.emptyViewClass</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">getPath</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hash.emptyViewClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>181</span> 
+<span class='line'>182</span> </span><span class="WHIT">    </span><span class="NAME">hash.emptyView</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">emptyViewClass.extend</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">      </span><span class="NAME">template</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">inverse</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">      </span><span class="NAME">tagName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">itemHash.tagName</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>187</span> 
+<span class='line'>188</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hash.preserveContext</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">    </span><span class="NAME">itemHash._templateContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.computed</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'content'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">property</span><span class="PUNC">(</span><span class="STRN">'content'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="WHIT">    </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">hash.preserveContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>194</span> 
+<span class='line'>195</span> </span><span class="WHIT">  </span><span class="NAME">hash.itemViewClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.Handlebars.ViewHelper.viewClassFromHTMLOptions</span><span class="PUNC">(</span><span class="NAME">itemViewClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">itemHash</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> 
+<span class='line'>197</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Ember.Handlebars.helpers.view.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">collectionClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>199</span> 
+<span class='line'>200</span> 
+<span class='line'>201</span> 
+<span class='line'>202</span> </span></pre></body></html>

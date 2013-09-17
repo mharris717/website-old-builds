@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- begin static/html-head.html -->
+    <meta charset="utf-8" />
+  <title>Ember.js API Docs</title>
+  <meta name="description" content="A framework for building fast, desktop caliber web applications." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/api.css" />
+
+  <!-- get CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+  <script>(window.jQuery || document.write('<script src="/js/lib/jquery-1.7.2.min.js"><\/script>'))</script>
+
+  <script src="/js/jquery-bbq.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/lib/modernizr-1.7.min.js"></script>
+  <!--[if lt IE 9]>
+  <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+
+  <!-- end static/html-head.html -->
+</head>
+
+  <body id="docs">
+<!-- ============================== header ================================= -->
+    <!-- begin static/header.html -->
+      <header role="banner">
+    <div id="wrapper">
+      <div id="logo">&nbsp;</div>
+      <nav role="navigation">
+        <ul id="nav">
+          <li><a href="http://emberjs.com">docs</a></li>
+          <li><a href="http://emberjs.com/community">community</a></li>
+          <li><a href="http://emberjs.com/examples">examples</a></li>
+          <li class="active"><a href="http://emberjs.com/api">api</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+
+    <!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+
+    <section id="list">
+      <header>
+        <form action="#" role="search">
+          <input type="text" />
+          <a href="#" class="search-reset"></a>
+        </form>
+      </header>
+      <div>
+        <span class="odd active"><a href="/">API Documentation Index</a></span>
+	
+	<span class='even' global><a href="../symbols/_global_.html">_global_</a></span>
+	
+	<span class='odd'><a href="../symbols/Array.html">Array</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.html">Ember</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Application.html">Ember.Application</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Array.html">Ember.Array</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.ArrayController.html">Ember.ArrayController</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.ArrayProxy.html">Ember.ArrayProxy</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Binding.html">Ember.Binding</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Checkbox.html">Ember.Checkbox</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.CollectionView.html">Ember.CollectionView</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Comparable.html">Ember.Comparable</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.ComputedProperty.html">Ember.ComputedProperty</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.ContainerView.html">Ember.ContainerView</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Copyable.html">Ember.Copyable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.CoreObject.html">Ember.CoreObject</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Enumerable.html">Ember.Enumerable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Error.html">Ember.Error</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Freezable.html">Ember.Freezable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Handlebars.html">Ember.Handlebars</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Logger.html">Ember.Logger</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Mixin.html">Ember.Mixin</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.MutableArray.html">Ember.MutableArray</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.MutableEnumerable.html">Ember.MutableEnumerable</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.NativeArray.html">Ember.NativeArray</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Object.html">Ember.Object</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Observable.html">Ember.Observable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.platform.html">Ember.platform</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.RenderBuffer.html">Ember.RenderBuffer</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.run.html">Ember.run</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.RunLoop.html">Ember.RunLoop</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Set.html">Ember.Set</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.StateManager.html">Ember.StateManager</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.String.html">Ember.String</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.TextArea.html">Ember.TextArea</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.TextField.html">Ember.TextField</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.TextSupport.html">Ember.TextSupport</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.View.html">Ember.View</a></span>
+	
+	<span class='odd'><a href="../symbols/Function.html">Function</a></span>
+	
+	<span class='even'><a href="../symbols/Handlebars.helpers.html">Handlebars.helpers</a></span>
+	
+	<span class='odd'><a href="../symbols/String.html">String</a></span>
+	
+	<span class='even'><a href="../symbols/window.html">window</a></span>
+	
+
+      </div>
+    </section>
+
+    <div role="main">
+      <section id="documentation">
+<!-- ============================== class title ============================ -->
+        <h1 class="classTitle">
+          
+          Class: Ember.CollectionView
+        </h1>
+
+<!-- ============================== class summary ========================== -->
+        <p class="description">
+          <span class="extends">
+          <br />Extends
+            <a href="../symbols/Ember.ContainerView.html">Ember.ContainerView</a>
+  
+  `Ember.CollectionView` is an `Ember.View` descendent responsible for managing a
+  collection (an array or array-like object) by maintaing a child view object and 
+  associated DOM representation for each item in the array and ensuring that child
+  views and their associated rendered HTML are updated when items in the array
+  are added, removed, or replaced.
+
+  ## Setting content
+  The managed collection of objects is referenced as the `Ember.CollectionView` instance's
+  `content` property.
+
+      someItemsView = Ember.CollectionView.create({
+        content: ['A', 'B','C']
+      })
+
+  The view for each item in the collection will have its `content` property set
+  to the item.
+
+  ## Specifying itemViewClass
+  By default the view class for each item in the managed collection will be an instance
+  of `Ember.View`. You can supply a different class by setting the `CollectionView`'s
+  `itemViewClass` property.
+
+  Given an empty `<body>` and the following code:
+
+
+        someItemsView = Ember.CollectionView.create({
+          classNames: ['a-collection'],
+          content: ['A','B','C'],
+          itemViewClass: Ember.View.extend({
+            template: Ember.Handlebars.compile("the letter: {{content}}")
+          })
+        })
+
+        someItemsView.appendTo('body')
+
+  Will result in the following HTML structure
+
+        <div class="ember-view a-collection">
+          <div class="ember-view">the letter: A</div>
+          <div class="ember-view">the letter: B</div>
+          <div class="ember-view">the letter: C</div>
+        </div>
+
+
+  ## Automatic matching of parent/child tagNames
+  Setting the `tagName` property of a `CollectionView` to any of 
+  "ul", "ol", "table", "thead", "tbody", "tfoot", "tr", or "select" will result
+  in the item views receiving an appropriately matched `tagName` property.
+
+
+  Given an empty `<body>` and the following code:
+
+        anUndorderedListView = Ember.CollectionView.create({
+          tagName: 'ul',
+          content: ['A','B','C'],
+          itemViewClass: Ember.View.extend({
+            template: Ember.Handlebars.compile("the letter: {{content}}")
+          })
+        })
+
+        anUndorderedListView.appendTo('body')
+
+  Will result in the following HTML structure
+
+        <ul class="ember-view a-collection">
+          <li class="ember-view">the letter: A</li>
+          <li class="ember-view">the letter: B</li>
+          <li class="ember-view">the letter: C</li>
+        </ul>
+
+  Additional tagName pairs can be provided by adding to `Ember.CollectionView.CONTAINER_MAP `
+
+        Ember.CollectionView.CONTAINER_MAP['article'] = 'section'
+
+
+  ## Empty View
+  You can provide an `Ember.View` subclass to the `Ember.CollectionView` instance as its
+  `emptyView` property. If the `content` property of a `CollectionView` is set to `null`
+  or an empty array, an instance of this view will be the `CollectionView`s only child.
+
+        aListWithNothing = Ember.CollectionView.create({
+          classNames: ['nothing']
+          content: null,
+          emptyView: Ember.View.extend({
+            template: Ember.Handlebars.compile("The collection is empty")
+          })
+        })
+
+        aListWithNothing.appendTo('body')
+
+  Will result in the following HTML structure
+
+        <div class="ember-view nothing">
+          <div class="ember-view">
+            The collection is empty
+          </div>
+        </div>
+
+  ## Adding and Removing items
+  The `childViews` property of a `CollectionView` should not be directly manipulated. Instead,
+  add, remove, replace items from its `content` property. This will trigger
+  appropriate changes to its rendered HTML.
+
+  ## Use in templates via the `{{collection}}` Ember.Handlebars helper
+  Ember.Handlebars provides a helper specifically for adding `CollectionView`s to templates.
+  See `Ember.Handlebars.collection` for more details.<br />
+          
+          </span>
+
+        
+
+          
+
+          
+            <span class="definedin">Defined in: <a href="../symbols/src/packages_ember-views_lib_views_collection_view.js.html">collection_view.js</a>.</span>
+          
+        </p>
+
+
+<!-- ============================== properties summary ===================== -->
+      
+      
+        
+        <h2>Field Summary</h2>
+        <div id="properties">
+        
+          <ul>
+          
+            <li>
+              Ember.CollectionView.<a href="../symbols/Ember.CollectionView.html#.CONTAINER_MAP">CONTAINER_MAP</a>
+            </li>
+          
+            <li>
+              <a href="../symbols/Ember.CollectionView.html#content">content</a>
+            </li>
+          
+            <li>
+              <a href="../symbols/Ember.CollectionView.html#emptyView">emptyView</a>
+            </li>
+          
+            <li>
+              <a href="../symbols/Ember.CollectionView.html#itemViewClass">itemViewClass</a>
+            </li>
+          
+          </ul>
+        
+
+        
+        </div>
+      
+
+
+
+
+<!-- ============================== methods summary ======================== -->
+      
+      
+        
+        
+      
+        
+        
+          <h2>Instance Methods</h2>
+          <ul class="methods">
+          
+            <li class="fixedFont"><a href="../symbols/Ember.CollectionView.html#arrayDidChange">arrayDidChange</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.CollectionView.html#arrayWillChange">arrayWillChange</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.CollectionView.html#createChildView">createChildView</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.CollectionView.html#willDestroy">willDestroy</a></li>
+          
+          </ul>
+        
+      
+<!-- ============================== events summary ======================== -->
+      
+
+
+
+<!-- ============================== field details ========================== -->
+      
+        <h2>
+          Field Detail
+        </h2>
+        
+          <a name=".CONTAINER_MAP"> </a>
+          <span class="light">Hash</span>
+          <span class="property"><span class="light">Ember.CollectionView.</span><b>CONTAINER_MAP</b></span>
+
+          <div class="description">
+            
+            
+            
+          </div>
+
+          
+
+            
+            
+            
+            
+
+        
+          <a name="content"> </a>
+          <span class="light"><a href="../symbols/Ember.Array.html">Ember.Array</a></span>
+          <span class="property"><b>content</b></span>
+
+          <div class="description">
+            A list of items to be displayed by the Ember.CollectionView.
+            
+            
+          </div>
+
+          
+
+            
+            
+            
+            
+              <dl class="detailList">
+              <dt class="heading">Default Value:</dt>
+              <dd>
+                null
+              </dd>
+              </dl>
+            
+
+        
+          <a name="emptyView"> </a>
+          <span class="light"><a href="../symbols/Ember.View.html">Ember.View</a></span>
+          <span class="property"><b>emptyView</b></span>
+
+          <div class="description">
+            An optional view to display if content is set to an empty array.
+            
+            
+          </div>
+
+          
+
+            
+            
+            
+            
+              <dl class="detailList">
+              <dt class="heading">Default Value:</dt>
+              <dd>
+                null
+              </dd>
+              </dl>
+            
+
+        
+          <a name="itemViewClass"> </a>
+          <span class="light"><a href="../symbols/Ember.View.html">Ember.View</a></span>
+          <span class="property"><b>itemViewClass</b></span>
+
+          <div class="description">
+            
+            
+            
+          </div>
+
+          
+
+            
+            
+            
+            
+              <dl class="detailList">
+              <dt class="heading">Default Value:</dt>
+              <dd>
+                Ember.View
+              </dd>
+              </dl>
+            
+
+        
+      
+
+
+<!-- ============================== method details ========================= -->
+      
+        
+        
+      
+        
+        
+          <h2>Instance Method Detail</h2>
+          
+            <a name="arrayDidChange"> </a>
+            <div class="fixedFont">
+              <span class="methodname">arrayDidChange</span>
+            </div>
+            <div class="description">
+              <p>Called when a mutation to the underlying content array occurs.</p>
+
+<p>This method will replay that mutation against the views that compose the
+<code class='syntax js'><span class="class">Ember</span>.<span class="class">CollectionView</span></code>, ensuring that the view reflects the model.</p>
+
+<p>This array observer is added in <code class='syntax js'><span class="variable">contentDidChange</span></code>.</p>
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <span class="light fixedFont"><a href="../symbols/Array.html">Array</a></span> <b>addedObjects</b>
+                    
+                  </dt>
+                  <dd>the objects that were added to the content</dd>
+                
+                  <dt>
+                    <span class="light fixedFont"><a href="../symbols/Array.html">Array</a></span> <b>removedObjects</b>
+                    
+                  </dt>
+                  <dd>the objects that were removed from the content</dd>
+                
+                  <dt>
+                    <span class="light fixedFont">Number</span> <b>changeIndex</b>
+                    
+                  </dt>
+                  <dd>the index at which the changes occurred</dd>
+                
+                  <dt>
+                    <b>added</b>
+                    
+                  </dt>
+                  <dd></dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+              
+              
+
+          
+            <a name="arrayWillChange"> </a>
+            <div class="fixedFont">
+              <span class="methodname">arrayWillChange</span>
+            </div>
+            <div class="description">
+              
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <b>content</b>
+                    
+                  </dt>
+                  <dd></dd>
+                
+                  <dt>
+                    <b>start</b>
+                    
+                  </dt>
+                  <dd></dd>
+                
+                  <dt>
+                    <b>removedCount</b>
+                    
+                  </dt>
+                  <dd></dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+              
+              
+
+          
+            <a name="createChildView"> </a>
+            <div class="fixedFont">
+              <span class="methodname">createChildView</span>
+            </div>
+            <div class="description">
+              
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <b>view</b>
+                    
+                  </dt>
+                  <dd></dd>
+                
+                  <dt>
+                    <b>attrs</b>
+                    
+                  </dt>
+                  <dd></dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+              
+              
+
+          
+            <a name="willDestroy"> </a>
+            <div class="fixedFont">
+              <span class="methodname">willDestroy</span>
+            </div>
+            <div class="description">
+              
+              
+              
+            </div>
+
+            
+
+              
+              
+              
+              
+              
+              
+              
+
+          
+        
+      
+
+<!-- ============================== event details ========================= -->
+      
+
+
+
+<!-- ============================== footer ================================= -->
+        <div class="fineprint" style="clear:both">
+          
+          Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Sep 17 2013 10:21:09 GMT-0400 (EDT)
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

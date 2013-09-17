@@ -1,0 +1,117 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">// ==========================================================================</span><span class="WHIT">
+<span class='line'>  2</span> </span><span class="COMM">// Project:  Ember Runtime</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">// Copyright: ©2006-2011 Strobe Inc. and contributors.</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="COMM">//            Portions ©2008-2011 Apple Inc. All rights reserved.</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="COMM">// License:   Licensed under MIT license (see license.js)</span><span class="WHIT">
+<span class='line'>  6</span> </span><span class="COMM">// ==========================================================================</span><span class="WHIT">
+<span class='line'>  7</span> 
+<span class='line'>  8</span> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'ember-runtime/core'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  9</span> 
+<span class='line'> 10</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a_slice</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Array.prototype.slice</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span> 
+<span class='line'> 12</span> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Ember.EXTEND_PROTOTYPES</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 13</span> 
+<span class='line'> 14</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'> 15</span>     The `property` extension of Javascript's Function prototype is available
+<span class='line'> 16</span>     when Ember.EXTEND_PROTOTYPES is true, which is the default. 
+<span class='line'> 17</span> 
+<span class='line'> 18</span>     Computed properties allow you to treat a function like a property:
+<span class='line'> 19</span> 
+<span class='line'> 20</span>         MyApp.president = Ember.Object.create({
+<span class='line'> 21</span>           firstName: "Barack",
+<span class='line'> 22</span>           lastName: "Obama",
+<span class='line'> 23</span> 
+<span class='line'> 24</span>           fullName: function() {
+<span class='line'> 25</span>             return this.get('firstName') + ' ' + this.get('lastName');
+<span class='line'> 26</span> 
+<span class='line'> 27</span>             // Call this flag to mark the function as a property
+<span class='line'> 28</span>           }.property()
+<span class='line'> 29</span>         });
+<span class='line'> 30</span> 
+<span class='line'> 31</span>         MyApp.president.get('fullName');    => "Barack Obama"
+<span class='line'> 32</span> 
+<span class='line'> 33</span>     Treating a function like a property is useful because they can work with
+<span class='line'> 34</span>     bindings, just like any other property.
+<span class='line'> 35</span> 
+<span class='line'> 36</span>     Many computed properties have dependencies on other properties. For
+<span class='line'> 37</span>     example, in the above example, the `fullName` property depends on
+<span class='line'> 38</span>     `firstName` and `lastName` to determine its value. You can tell Ember.js
+<span class='line'> 39</span>     about these dependencies like this:
+<span class='line'> 40</span> 
+<span class='line'> 41</span>         MyApp.president = Ember.Object.create({
+<span class='line'> 42</span>           firstName: "Barack",
+<span class='line'> 43</span>           lastName: "Obama",
+<span class='line'> 44</span> 
+<span class='line'> 45</span>           fullName: function() {
+<span class='line'> 46</span>             return this.get('firstName') + ' ' + this.get('lastName');
+<span class='line'> 47</span> 
+<span class='line'> 48</span>             // Tell Ember.js that this computed property depends on firstName
+<span class='line'> 49</span>             // and lastName
+<span class='line'> 50</span>           }.property('firstName', 'lastName')
+<span class='line'> 51</span>         });
+<span class='line'> 52</span> 
+<span class='line'> 53</span>     Make sure you list these dependencies so Ember.js knows when to update
+<span class='line'> 54</span>     bindings that connect to a computed property.
+<span class='line'> 55</span> 
+<span class='line'> 56</span>     Note: you will usually want to use `property(...)` with `cacheable()`.
+<span class='line'> 57</span> 
+<span class='line'> 58</span>     @see Ember.ComputedProperty
+<span class='line'> 59</span>     @see Ember.computed
+<span class='line'> 60</span>   */</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="WHIT">  </span><span class="NAME">Function.prototype.property</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ret</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.computed</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ret.property.apply</span><span class="PUNC">(</span><span class="NAME">ret</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 65</span> 
+<span class='line'> 66</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'> 67</span>     The `observes` extension of Javascript's Function prototype is available
+<span class='line'> 68</span>     when Ember.EXTEND_PROTOTYPES is true, which is the default. 
+<span class='line'> 69</span> 
+<span class='line'> 70</span>     You can observe property changes simply by adding the `observes`
+<span class='line'> 71</span>     call to the end of your method declarations in classes that you write.
+<span class='line'> 72</span>     For example:
+<span class='line'> 73</span> 
+<span class='line'> 74</span>         Ember.Object.create({
+<span class='line'> 75</span>           valueObserver: function() {
+<span class='line'> 76</span>             // Executes whenever the "value" property changes
+<span class='line'> 77</span>           }.observes('value')
+<span class='line'> 78</span>         });
+<span class='line'> 79</span>     
+<span class='line'> 80</span>     @see Ember.Observable
+<span class='line'> 81</span>   */</span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">  </span><span class="NAME">Function.prototype.observes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">    </span><span class="NAME">this.__ember_observes__</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a_slice.call</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 86</span> 
+<span class='line'> 87</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'> 88</span>     The `observesBefore` extension of Javascript's Function prototype is
+<span class='line'> 89</span>     available when Ember.EXTEND_PROTOTYPES is true, which is the default. 
+<span class='line'> 90</span> 
+<span class='line'> 91</span>     You can get notified when a property changes is about to happen by
+<span class='line'> 92</span>     by adding the `observesBefore` call to the end of your method
+<span class='line'> 93</span>     declarations in classes that you write. For example:
+<span class='line'> 94</span> 
+<span class='line'> 95</span>         Ember.Object.create({
+<span class='line'> 96</span>           valueObserver: function() {
+<span class='line'> 97</span>             // Executes whenever the "value" property is about to change
+<span class='line'> 98</span>           }.observesBefore('value')
+<span class='line'> 99</span>         });
+<span class='line'>100</span>     
+<span class='line'>101</span>     @see Ember.Observable
+<span class='line'>102</span>   */</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">  </span><span class="NAME">Function.prototype.observesBefore</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">    </span><span class="NAME">this.__ember_observesBefore__</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a_slice.call</span><span class="PUNC">(</span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span> 
+<span class='line'>108</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>109</span> 
+<span class='line'>110</span> </span></pre></body></html>

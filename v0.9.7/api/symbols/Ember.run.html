@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- begin static/html-head.html -->
+    <meta charset="utf-8" />
+  <title>Ember.js API Docs</title>
+  <meta name="description" content="A framework for building fast, desktop caliber web applications." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/api.css" />
+
+  <!-- get CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+  <script>(window.jQuery || document.write('<script src="/js/lib/jquery-1.7.2.min.js"><\/script>'))</script>
+
+  <script src="/js/jquery-bbq.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/lib/modernizr-1.7.min.js"></script>
+  <!--[if lt IE 9]>
+  <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+
+  <!-- end static/html-head.html -->
+</head>
+
+  <body id="docs">
+<!-- ============================== header ================================= -->
+    <!-- begin static/header.html -->
+      <header role="banner">
+    <div id="wrapper">
+      <div id="logo">&nbsp;</div>
+      <nav role="navigation">
+        <ul id="nav">
+          <li><a href="http://emberjs.com">docs</a></li>
+          <li><a href="http://emberjs.com/community">community</a></li>
+          <li><a href="http://emberjs.com/examples">examples</a></li>
+          <li class="active"><a href="http://emberjs.com/api">api</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+
+    <!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+
+    <section id="list">
+      <header>
+        <form action="#" role="search">
+          <input type="text" />
+          <a href="#" class="search-reset"></a>
+        </form>
+      </header>
+      <div>
+        <span class="odd active"><a href="/">API Documentation Index</a></span>
+	
+	<span class='even' global><a href="../symbols/_global_.html">_global_</a></span>
+	
+	<span class='odd'><a href="../symbols/Array.html">Array</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.html">Ember</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Application.html">Ember.Application</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Array.html">Ember.Array</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.ArrayController.html">Ember.ArrayController</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.ArrayProxy.html">Ember.ArrayProxy</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Binding.html">Ember.Binding</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Checkbox.html">Ember.Checkbox</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.CollectionView.html">Ember.CollectionView</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Comparable.html">Ember.Comparable</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.ComputedProperty.html">Ember.ComputedProperty</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.ContainerView.html">Ember.ContainerView</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Copyable.html">Ember.Copyable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.CoreObject.html">Ember.CoreObject</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Enumerable.html">Ember.Enumerable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Error.html">Ember.Error</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Freezable.html">Ember.Freezable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Handlebars.html">Ember.Handlebars</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Logger.html">Ember.Logger</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Mixin.html">Ember.Mixin</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.MutableArray.html">Ember.MutableArray</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.MutableEnumerable.html">Ember.MutableEnumerable</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.NativeArray.html">Ember.NativeArray</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Object.html">Ember.Object</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.Observable.html">Ember.Observable</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.platform.html">Ember.platform</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.RenderBuffer.html">Ember.RenderBuffer</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.run.html">Ember.run</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.RunLoop.html">Ember.RunLoop</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.Set.html">Ember.Set</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.StateManager.html">Ember.StateManager</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.String.html">Ember.String</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.TextArea.html">Ember.TextArea</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.TextField.html">Ember.TextField</a></span>
+	
+	<span class='odd'><a href="../symbols/Ember.TextSupport.html">Ember.TextSupport</a></span>
+	
+	<span class='even'><a href="../symbols/Ember.View.html">Ember.View</a></span>
+	
+	<span class='odd'><a href="../symbols/Function.html">Function</a></span>
+	
+	<span class='even'><a href="../symbols/Handlebars.helpers.html">Handlebars.helpers</a></span>
+	
+	<span class='odd'><a href="../symbols/String.html">String</a></span>
+	
+	<span class='even'><a href="../symbols/window.html">window</a></span>
+	
+
+      </div>
+    </section>
+
+    <div role="main">
+      <section id="documentation">
+<!-- ============================== class title ============================ -->
+        <h1 class="classTitle">
+          
+          Namespace: Ember.run
+        </h1>
+
+<!-- ============================== class summary ========================== -->
+        <p class="description">
+          <span class="extends">
+          
+          </span>
+
+        
+
+          <p><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span></code> is both a function and a namespace for
+RunLoop-related functions.</p>
+
+          
+            <span class="definedin">Defined in: <a href="../symbols/src/packages_ember-metal_lib_run_loop.js.html">run_loop.js</a>.</span>
+          
+        </p>
+
+
+<!-- ============================== properties summary ===================== -->
+      
+      
+        
+        <h2>Field Summary</h2>
+        <div id="properties">
+        
+          <ul>
+          
+            <li>
+              Ember.run.<a href="../symbols/Ember.run.html#.queues">queues</a>
+            </li>
+          
+          </ul>
+        
+
+        
+        </div>
+      
+
+
+
+
+<!-- ============================== methods summary ======================== -->
+      
+      
+        
+        
+          <h2>Class Methods</h2>
+          <ul class="methods">
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.autorun">autorun</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.begin">begin</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.cancel">cancel</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.end">end</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.later">later</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.next">next</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.once">once</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.run^2">run</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.schedule">schedule</a></li>
+          
+            <li class="fixedFont"><a href="../symbols/Ember.run.html#.sync">sync</a></li>
+          
+          </ul>
+        
+      
+        
+        
+      
+<!-- ============================== events summary ======================== -->
+      
+
+
+
+<!-- ============================== field details ========================== -->
+      
+        <h2>
+          Field Detail
+        </h2>
+        
+          <a name=".queues"> </a>
+          
+          <span class="property"><span class="light">Ember.run.</span><b>queues</b></span>
+
+          <div class="description">
+            <p>Array of named queues.  This array determines the order in which queues
+are flushed at the end of the RunLoop.  You can define your own queues by
+simply adding the queue name to this array.  Normally you should not need
+to inspect or modify this property.</p>
+            
+            
+          </div>
+
+          
+
+            
+            
+            
+            
+              <dl class="detailList">
+              <dt class="heading">Default Value:</dt>
+              <dd>
+                ['sync', 'actions', 'destroy', 'timers']
+              </dd>
+              </dl>
+            
+
+        
+      
+
+
+<!-- ============================== method details ========================= -->
+      
+        
+        
+          <h2>Class Method Detail</h2>
+          
+            <a name=".autorun"> </a>
+            <div class="fixedFont">
+              <span class="methodname">autorun</span>
+            </div>
+            <div class="description">
+              <p>Begins a new RunLoop if necessary and schedules a timer to flush the
+RunLoop at a later time.  This method is used by parts of Ember to
+ensure the RunLoop always finishes.  You normally do not need to call this
+method directly.  Instead use <code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>().</code></p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">autorun</span>();
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont"><a href="../symbols/Ember.RunLoop.html">Ember.RunLoop</a></span> the new current RunLoop</dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".begin"> </a>
+            <div class="fixedFont">
+              <span class="methodname">begin</span>
+            </div>
+            <div class="description">
+              <p>Begins a new RunLoop.  Any deferred actions invoked after the begin will
+be buffered until you invoke a matching call to <code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">end</span>().</code>  This is
+an lower-level way to use a RunLoop instead of using <code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>().</code></p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">begin</span>();
+<span class="comment">// code to be execute within a RunLoop </span>
+<span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">end</span>();
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">void</span> </dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".cancel"> </a>
+            <div class="fixedFont">
+              <span class="methodname">cancel</span>
+            </div>
+            <div class="description">
+              <p>Cancels a scheduled item.  Must be a value returned by <code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">later</span>()</code>,
+<code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">once</span>()</code>, or <code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">next</span>()</code>.</p>
+
+<pre><code class='syntax js'><span class="keyword">var</span> <span class="variable">runNext</span> = <span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">next</span>(<span class="variable">myContext</span>, <span class="keyword">function</span>(){
+  <span class="comment">// will not be executed</span>
+});
+<span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">cancel</span>(<span class="variable">runNext</span>);
+
+<span class="keyword">var</span> <span class="variable">runLater</span> = <span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">next</span>(<span class="variable">myContext</span>, <span class="keyword">function</span>(){
+  <span class="comment">// will not be executed</span>
+}, <span class="number integer">500</span>);
+<span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">cancel</span>(<span class="variable">runLater</span>);
+
+<span class="keyword">var</span> <span class="variable">runOnce</span> = <span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">once</span>(<span class="variable">myContext</span>, <span class="keyword">function</span>(){
+  <span class="comment">// will not be executed</span>
+});
+<span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">cancel</span>(<span class="variable">runOnce</span>);
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <span class="light fixedFont">Object</span> <b>timer</b>
+                    
+                  </dt>
+                  <dd>Timer object to cancel</dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">void</span> </dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".end"> </a>
+            <div class="fixedFont">
+              <span class="methodname">end</span>
+            </div>
+            <div class="description">
+              <p>Ends a RunLoop.  This must be called sometime after you call <code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">begin</span>()</code>
+to flush any deferred actions.  This is a lower-level way to use a RunLoop
+instead of using <code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>().</code></p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">begin</span>();
+<span class="comment">// code to be execute within a RunLoop </span>
+<span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">end</span>();
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">void</span> </dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".later"> </a>
+            <div class="fixedFont">
+              <span class="methodname">later</span>
+            </div>
+            <div class="description">
+              <p>Invokes the passed target/method and optional arguments after a specified
+period if time.  The last parameter of this method must always be a number
+of milliseconds.</p>
+
+<p>You should use this method whenever you need to run some action after a
+period of time instead of using <code class='syntax js'><span class="variable">setTimeout</span></code>().  This method will ensure that
+items that expire during the same script execution cycle all execute
+together, which is often more efficient than using a real <code class='syntax js'><span class="variable">setTimeout</span></code>.</p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">later</span>(<span class="variable">myContext</span>, <span class="keyword">function</span>(){
+  <span class="comment">// code here will execute within a RunLoop in about 500ms with this == myContext</span>
+}, <span class="number integer">500</span>);
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <span class="light fixedFont">Object</span> <b>target</b>
+                    
+                  </dt>
+                  <dd>(optional) target of method to invoke</dd>
+                
+                  <dt>
+                    <span class="light fixedFont"><a href="../symbols/Function.html">Function</a>|<a href="../symbols/String.html">String</a></span> <b>method</b>
+                    
+                  </dt>
+                  <dd>The method to invoke.  If you pass a string it will be resolved on the
+    target at the time the method is invoked.</dd>
+                
+                  <dt>
+                    <span class="light fixedFont">Object...</span> <b>args</b>
+                    
+                  </dt>
+                  <dd>Optional arguments to pass to the timeout.</dd>
+                
+                  <dt>
+                    <span class="light fixedFont">Number</span> <b>wait</b>
+                    
+                  </dt>
+                  <dd>Number of milliseconds to wait.</dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">Timer</span> an object you can use to cancel a timer at a later time.</dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".next"> </a>
+            <div class="fixedFont">
+              <span class="methodname">next</span>
+            </div>
+            <div class="description">
+              <p>Schedules an item to run after control has been returned to the system.
+This is often equivalent to calling <code class='syntax js'><span class="variable">setTimeout</span></code>(function...,1).</p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">next</span>(<span class="variable">myContext</span>, <span class="keyword">function</span>(){
+  <span class="comment">// code to be executed in the next RunLoop, which will be scheduled after the current one</span>
+});
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <span class="light fixedFont">Object</span> <b>target</b>
+                    
+                  </dt>
+                  <dd>(optional) target of method to invoke</dd>
+                
+                  <dt>
+                    <span class="light fixedFont"><a href="../symbols/Function.html">Function</a>|<a href="../symbols/String.html">String</a></span> <b>method</b>
+                    
+                  </dt>
+                  <dd>The method to invoke.  If you pass a string it will be resolved on the
+    target at the time the method is invoked.</dd>
+                
+                  <dt>
+                    <span class="light fixedFont">Object...</span> <b>args</b>
+                    
+                  </dt>
+                  <dd>Optional arguments to pass to the timeout.</dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">Object</span> timer</dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".once"> </a>
+            <div class="fixedFont">
+              <span class="methodname">once</span>
+            </div>
+            <div class="description">
+              <p>Schedules an item to run one time during the current RunLoop.  Calling
+this method with the same target/method combination will have no effect.</p>
+
+<p>Note that although you can pass optional arguments these will not be
+considered when looking for duplicates.  New arguments will replace previous
+calls.</p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>(<span class="keyword">function</span>(){
+  <span class="keyword">var</span> <span class="variable">doFoo</span> = <span class="keyword">function</span>() { <span class="variable">foo</span>(); }
+  <span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">once</span>(<span class="variable">myContext</span>, <span class="variable">doFoo</span>);
+  <span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">once</span>(<span class="variable">myContext</span>, <span class="variable">doFoo</span>);
+  <span class="comment">// doFoo will only be executed once at the end of the RunLoop</span>
+});
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <span class="light fixedFont">Object</span> <b>target</b>
+                    
+                  </dt>
+                  <dd>(optional) target of method to invoke</dd>
+                
+                  <dt>
+                    <span class="light fixedFont"><a href="../symbols/Function.html">Function</a>|<a href="../symbols/String.html">String</a></span> <b>method</b>
+                    
+                  </dt>
+                  <dd>The method to invoke.  If you pass a string it will be resolved on the
+    target at the time the method is invoked.</dd>
+                
+                  <dt>
+                    <span class="light fixedFont">Object...</span> <b>args</b>
+                    
+                  </dt>
+                  <dd>Optional arguments to pass to the timeout.</dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">Object</span> timer</dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".run^2"> </a>
+            <div class="fixedFont">
+              <span class="methodname">run</span>
+            </div>
+            <div class="description">
+              <p>Runs the passed target and method inside of a RunLoop, ensuring any
+deferred actions including bindings and views updates are flushed at the
+end.</p>
+
+<p>Normally you should not need to invoke this method yourself.  However if
+you are implementing raw event handlers when interfacing with other
+libraries or plugins, you should probably wrap all of your code inside this
+call.</p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>(<span class="keyword">function</span>(){
+  <span class="comment">// code to be execute within a RunLoop </span>
+});
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <span class="light fixedFont">Object</span> <b>target</b>
+                    
+                  </dt>
+                  <dd>(Optional) target of method to call</dd>
+                
+                  <dt>
+                    <span class="light fixedFont"><a href="../symbols/Function.html">Function</a>|<a href="../symbols/String.html">String</a></span> <b>method</b>
+                    
+                  </dt>
+                  <dd>Method to invoke.  May be a function or a string.  If you pass a string
+    then it will be looked up on the passed target.</dd>
+                
+                  <dt>
+                    <span class="light fixedFont">Object...</span> <b>args</b>
+                    
+                  </dt>
+                  <dd>Any additional arguments you wish to pass to the method.</dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">Object</span> return value from invoking the passed function.</dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".schedule"> </a>
+            <div class="fixedFont">
+              <span class="methodname">schedule</span>
+            </div>
+            <div class="description">
+              <p>Adds the passed target/method and any optional arguments to the named
+queue to be executed at the end of the RunLoop.  If you have not already
+started a RunLoop when calling this method one will be started for you
+automatically.</p>
+
+<p>At the end of a RunLoop, any methods scheduled in this way will be invoked.
+Methods will be invoked in an order matching the named queues defined in
+the run.queues property.</p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">schedule</span>(<span class="string">'timers'</span>, <span class="this">this</span>, <span class="keyword">function</span>(){
+  <span class="comment">// this will be executed at the end of the RunLoop, when timers are run</span>
+  <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;scheduled on timers queue&quot;</span>);
+});
+<span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">schedule</span>(<span class="string">'sync'</span>, <span class="this">this</span>, <span class="keyword">function</span>(){
+  <span class="comment">// this will be executed at the end of the RunLoop, when bindings are synced</span>
+  <span class="variable">console</span>.<span class="variable">log</span>(<span class="string">&quot;scheduled on sync queue&quot;</span>);
+});
+<span class="comment">// Note the functions will be run in order based on the run queues order. Output would be:</span>
+<span class="comment">//   scheduled on sync queue</span>
+<span class="comment">//   scheduled on timers queue</span>
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+                <dl class="parameters">
+                <dt class="heading">Parameters:</dt>
+                
+                  <dt>
+                    <span class="light fixedFont"><a href="../symbols/String.html">String</a></span> <b>queue</b>
+                    
+                  </dt>
+                  <dd>The name of the queue to schedule against.  Default queues are 'sync' and
+    'actions'</dd>
+                
+                  <dt>
+                    <span class="light fixedFont">Object</span> <b>target</b>
+                    
+                  </dt>
+                  <dd>(Optional) target object to use as the context when invoking a method.</dd>
+                
+                  <dt>
+                    <span class="light fixedFont"><a href="../symbols/String.html">String</a>|<a href="../symbols/Function.html">Function</a></span> <b>method</b>
+                    
+                  </dt>
+                  <dd>The method to invoke.  If you pass a string it will be resolved on the
+    target object at the time the scheduled item is invoked allowing you to
+    change the target function.</dd>
+                
+                  <dt>
+                    <span class="light fixedFont">Object</span> <b>arguments...</b>
+                    
+                  </dt>
+                  <dd>Optional arguments to be passed to the queued method.</dd>
+                
+                </dl>
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">void</span> </dd>
+                
+                </dl>
+              
+              
+              
+
+          
+            <a name=".sync"> </a>
+            <div class="fixedFont">
+              <span class="methodname">sync</span>
+            </div>
+            <div class="description">
+              <p>Immediately flushes any events scheduled in the 'sync' queue.  Bindings
+use this queue so this method is a useful way to immediately force all
+bindings in the application to sync.</p>
+
+<p>You should call this method anytime you need any changed state to propagate
+throughout the app immediately without repainting the UI.</p>
+
+<pre><code class='syntax js'><span class="class">Ember</span>.<span class="variable">run</span>.<span class="variable">sync</span>();
+</code></pre>
+              
+              
+            </div>
+
+            
+
+              
+              
+              
+              
+              
+                <dl class="returns">
+                <dt class="heading">Returns:</dt>
+                
+                  <dd><span class="light fixedFont">void</span> </dd>
+                
+                </dl>
+              
+              
+              
+
+          
+        
+      
+        
+        
+      
+
+<!-- ============================== event details ========================= -->
+      
+
+
+
+<!-- ============================== footer ================================= -->
+        <div class="fineprint" style="clear:both">
+          
+          Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Sep 17 2013 10:21:09 GMT-0400 (EDT)
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

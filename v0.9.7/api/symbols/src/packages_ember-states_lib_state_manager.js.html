@@ -1,0 +1,819 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.get</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">set</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.set</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">getPath</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.getPath</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fmt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.String.fmt</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  2</span> 
+<span class='line'>  3</span> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'ember-states/state'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  4</span> 
+<span class='line'>  5</span> </span><span class="COMM">/**
+<span class='line'>  6</span>   @class
+<span class='line'>  7</span>   
+<span class='line'>  8</span>   StateManager is part of Ember's implementation of a finite state machine. A StateManager
+<span class='line'>  9</span>   instance manages a number of properties that are instances of `Ember.State`,
+<span class='line'> 10</span>   tracks the current active state, and triggers callbacks when states have changed.
+<span class='line'> 11</span> 
+<span class='line'> 12</span>   ## Defining States
+<span class='line'> 13</span> 
+<span class='line'> 14</span>   The states of StateManager can be declared in one of two ways. First, you can define
+<span class='line'> 15</span>   a `states` property that contains all the states:
+<span class='line'> 16</span> 
+<span class='line'> 17</span>       managerA = Ember.StateManager.create({
+<span class='line'> 18</span>         states: {
+<span class='line'> 19</span>           stateOne: Ember.State.create(),
+<span class='line'> 20</span>           stateTwo: Ember.State.create()
+<span class='line'> 21</span>         }
+<span class='line'> 22</span>       })
+<span class='line'> 23</span> 
+<span class='line'> 24</span>       managerA.get('states')
+<span class='line'> 25</span>       // {
+<span class='line'> 26</span>       //   stateOne: Ember.State.create(),
+<span class='line'> 27</span>       //   stateTwo: Ember.State.create()
+<span class='line'> 28</span>       // }
+<span class='line'> 29</span> 
+<span class='line'> 30</span>   You can also add instances of `Ember.State` (or an `Ember.State` subclass) directly as properties
+<span class='line'> 31</span>   of a StateManager. These states will be collected into the `states` property for you.
+<span class='line'> 32</span> 
+<span class='line'> 33</span>       managerA = Ember.StateManager.create({
+<span class='line'> 34</span>         stateOne: Ember.State.create(),
+<span class='line'> 35</span>         stateTwo: Ember.State.create()
+<span class='line'> 36</span>       })
+<span class='line'> 37</span> 
+<span class='line'> 38</span>       managerA.get('states')
+<span class='line'> 39</span>       // {
+<span class='line'> 40</span>       //   stateOne: Ember.State.create(),
+<span class='line'> 41</span>       //   stateTwo: Ember.State.create()
+<span class='line'> 42</span>       // }
+<span class='line'> 43</span> 
+<span class='line'> 44</span>   ## The Initial State
+<span class='line'> 45</span>   When created a StateManager instance will immediately enter into the state
+<span class='line'> 46</span>   defined as its `start` property or the state referenced by name in its 
+<span class='line'> 47</span>   `initialState` property:
+<span class='line'> 48</span> 
+<span class='line'> 49</span>       managerA = Ember.StateManager.create({
+<span class='line'> 50</span>         start: Ember.State.create({})
+<span class='line'> 51</span>       })
+<span class='line'> 52</span> 
+<span class='line'> 53</span>       managerA.getPath('currentState.name') // 'start'
+<span class='line'> 54</span> 
+<span class='line'> 55</span>       managerB = Ember.StateManager.create({
+<span class='line'> 56</span>         initialState: 'beginHere',
+<span class='line'> 57</span>         beginHere: Ember.State.create({})
+<span class='line'> 58</span>       })
+<span class='line'> 59</span> 
+<span class='line'> 60</span>       managerB.getPath('currentState.name') // 'beginHere'
+<span class='line'> 61</span> 
+<span class='line'> 62</span>   Because it is a property you may also provided a computed function if you wish to derive
+<span class='line'> 63</span>   an `initialState` programmatically:
+<span class='line'> 64</span> 
+<span class='line'> 65</span>       managerC = Ember.StateManager.create({
+<span class='line'> 66</span>         initialState: function(){
+<span class='line'> 67</span>           if (someLogic) {
+<span class='line'> 68</span>             return 'active';
+<span class='line'> 69</span>           } else {
+<span class='line'> 70</span>             return 'passive';
+<span class='line'> 71</span>           }
+<span class='line'> 72</span>         }.property(),
+<span class='line'> 73</span>         active: Ember.State.create({})
+<span class='line'> 74</span>         passive: Ember.State.create({})
+<span class='line'> 75</span>       })
+<span class='line'> 76</span> 
+<span class='line'> 77</span>   ## Moving Between States
+<span class='line'> 78</span>   A StateManager can have any number of Ember.State objects as properties
+<span class='line'> 79</span>   and can have a single one of these states as its current state.
+<span class='line'> 80</span> 
+<span class='line'> 81</span>   Calling `goToState` transitions between states:
+<span class='line'> 82</span> 
+<span class='line'> 83</span>        robotManager = Ember.StateManager.create({
+<span class='line'> 84</span>         initialState: 'poweredDown',
+<span class='line'> 85</span>          poweredDown: Ember.State.create({}),
+<span class='line'> 86</span>          poweredUp: Ember.State.create({})
+<span class='line'> 87</span>        })
+<span class='line'> 88</span> 
+<span class='line'> 89</span>        robotManager.getPath('currentState.name') // 'poweredDown'
+<span class='line'> 90</span>        robotManager.goToState('poweredUp')
+<span class='line'> 91</span>        robotManager.getPath('currentState.name') // 'poweredUp'
+<span class='line'> 92</span> 
+<span class='line'> 93</span>   Before transitioning into a new state the existing `currentState` will have its
+<span class='line'> 94</span>   `exit` method called with with the StateManager instance as its first argument and 
+<span class='line'> 95</span>   an object representing the the transition as its second argument.
+<span class='line'> 96</span> 
+<span class='line'> 97</span>   After transitioning into a new state the new `currentState` will have its
+<span class='line'> 98</span>   `enter` method called with with the StateManager instance as its first argument and 
+<span class='line'> 99</span>   an object representing the the transition as its second argument.
+<span class='line'>100</span> 
+<span class='line'>101</span>       robotManager = Ember.StateManager.create({
+<span class='line'>102</span>        initialState: 'poweredDown',
+<span class='line'>103</span>         poweredDown: Ember.State.create({
+<span class='line'>104</span>           exit: function(stateManager, transition){
+<span class='line'>105</span>             console.log("exiting the poweredDown state")
+<span class='line'>106</span>           }
+<span class='line'>107</span>         }),
+<span class='line'>108</span>         poweredUp: Ember.State.create({
+<span class='line'>109</span>           enter: function(stateManager, transition){
+<span class='line'>110</span>             console.log("entering the poweredUp state. Destroy all humans.")
+<span class='line'>111</span>           }
+<span class='line'>112</span>         })
+<span class='line'>113</span>       })
+<span class='line'>114</span> 
+<span class='line'>115</span>       robotManager.getPath('currentState.name') // 'poweredDown'
+<span class='line'>116</span>       robotManager.goToState('poweredUp')
+<span class='line'>117</span>       // will log
+<span class='line'>118</span>       // 'exiting the poweredDown state'
+<span class='line'>119</span>       // 'entering the poweredUp state. Destroy all humans.'
+<span class='line'>120</span> 
+<span class='line'>121</span> 
+<span class='line'>122</span>   Once a StateManager is already in a state, subsequent attempts to enter that state will
+<span class='line'>123</span>   not trigger enter or exit method calls. Attempts to transition into a state that the 
+<span class='line'>124</span>   manager does not have will result in no changes in the StateManager's current state:
+<span class='line'>125</span> 
+<span class='line'>126</span>       robotManager = Ember.StateManager.create({
+<span class='line'>127</span>        initialState: 'poweredDown',
+<span class='line'>128</span>         poweredDown: Ember.State.create({
+<span class='line'>129</span>           exit: function(stateManager, transition){
+<span class='line'>130</span>             console.log("exiting the poweredDown state")
+<span class='line'>131</span>           }
+<span class='line'>132</span>         }),
+<span class='line'>133</span>         poweredUp: Ember.State.create({
+<span class='line'>134</span>           enter: function(stateManager, transition){
+<span class='line'>135</span>             console.log("entering the poweredUp state. Destroy all humans.")
+<span class='line'>136</span>           }
+<span class='line'>137</span>         })
+<span class='line'>138</span>       })
+<span class='line'>139</span> 
+<span class='line'>140</span>       robotManager.getPath('currentState.name') // 'poweredDown'
+<span class='line'>141</span>       robotManager.goToState('poweredUp')
+<span class='line'>142</span>       // will log
+<span class='line'>143</span>       // 'exiting the poweredDown state'
+<span class='line'>144</span>       // 'entering the poweredUp state. Destroy all humans.'
+<span class='line'>145</span>       robotManager.goToState('poweredUp') // no logging, no state change
+<span class='line'>146</span> 
+<span class='line'>147</span>       robotManager.goToState('someUnknownState') // silently fails
+<span class='line'>148</span>       robotManager.getPath('currentState.name') // 'poweredUp'
+<span class='line'>149</span> 
+<span class='line'>150</span> 
+<span class='line'>151</span>   Each state property may itself contain properties that are instances of Ember.State. 
+<span class='line'>152</span>   The StateManager can transition to specific sub-states in a series of goToState method calls or
+<span class='line'>153</span>   via a single goToState with the full path to the specific state. The StateManager will also 
+<span class='line'>154</span>   keep track of the full path to its currentState
+<span class='line'>155</span> 
+<span class='line'>156</span> 
+<span class='line'>157</span>       robotManager = Ember.StateManager.create({
+<span class='line'>158</span>         initialState: 'poweredDown',
+<span class='line'>159</span>          poweredDown: Ember.State.create({
+<span class='line'>160</span>            charging: Ember.State.create(),
+<span class='line'>161</span>            charged: Ember.State.create()
+<span class='line'>162</span>          }),
+<span class='line'>163</span>          poweredUp: Ember.State.create({
+<span class='line'>164</span>            mobile: Ember.State.create(),
+<span class='line'>165</span>            stationary: Ember.State.create()
+<span class='line'>166</span>          })
+<span class='line'>167</span>        })
+<span class='line'>168</span> 
+<span class='line'>169</span>        robotManager.getPath('currentState.name') // 'poweredDown'
+<span class='line'>170</span> 
+<span class='line'>171</span>        robotManager.goToState('poweredUp')
+<span class='line'>172</span>        robotManager.getPath('currentState.name') // 'poweredUp'
+<span class='line'>173</span> 
+<span class='line'>174</span>        robotManager.goToState('mobile')
+<span class='line'>175</span>        robotManager.getPath('currentState.name') // 'mobile'
+<span class='line'>176</span> 
+<span class='line'>177</span>        // transition via a state path
+<span class='line'>178</span>        robotManager.goToState('poweredDown.charging')
+<span class='line'>179</span>        robotManager.getPath('currentState.name') // 'charging'
+<span class='line'>180</span> 
+<span class='line'>181</span>        robotManager.getPath('currentState.get.path') // 'poweredDown.charging'
+<span class='line'>182</span> 
+<span class='line'>183</span>     Enter transition methods will be called for each state and nested child state in their 
+<span class='line'>184</span>     hierarchical order.  Exit methods will be called for each state and its nested states in
+<span class='line'>185</span>     reverse hierarchical order.
+<span class='line'>186</span> 
+<span class='line'>187</span>     Exit transitions for a parent state are not called when entering into one of its child states,
+<span class='line'>188</span>     only when transitioning to a new section of possible states in the hierarchy.
+<span class='line'>189</span> 
+<span class='line'>190</span>        robotManager = Ember.StateManager.create({
+<span class='line'>191</span>          initialState: 'poweredDown',
+<span class='line'>192</span>           poweredDown: Ember.State.create({
+<span class='line'>193</span>             enter: function(){},
+<span class='line'>194</span>             exit: function(){
+<span class='line'>195</span>               console.log("exited poweredDown state")
+<span class='line'>196</span>             },
+<span class='line'>197</span>             charging: Ember.State.create({
+<span class='line'>198</span>               enter: function(){},
+<span class='line'>199</span>               exit: function(){}
+<span class='line'>200</span>             }),
+<span class='line'>201</span>             charged: Ember.State.create({
+<span class='line'>202</span>               enter: function(){
+<span class='line'>203</span>                 console.log("entered charged state")
+<span class='line'>204</span>               },
+<span class='line'>205</span>               exit: function(){
+<span class='line'>206</span>                 console.log("exited charged state")
+<span class='line'>207</span>               }
+<span class='line'>208</span>             })
+<span class='line'>209</span>           }),
+<span class='line'>210</span>           poweredUp: Ember.State.create({
+<span class='line'>211</span>             enter: function(){
+<span class='line'>212</span>               console.log("entered poweredUp state")
+<span class='line'>213</span>             },
+<span class='line'>214</span>             exit: function(){},
+<span class='line'>215</span>             mobile: Ember.State.create({
+<span class='line'>216</span>               enter: function(){
+<span class='line'>217</span>                 console.log("entered mobile state")
+<span class='line'>218</span>               },
+<span class='line'>219</span>               exit: function(){}
+<span class='line'>220</span>             }),
+<span class='line'>221</span>             stationary: Ember.State.create({
+<span class='line'>222</span>               enter: function(){},
+<span class='line'>223</span>               exit: function(){}
+<span class='line'>224</span>             })
+<span class='line'>225</span>           })
+<span class='line'>226</span>         })
+<span class='line'>227</span> 
+<span class='line'>228</span> 
+<span class='line'>229</span>         robotManager.get('currentState.get.path') // 'poweredDown'
+<span class='line'>230</span>         robotManager.goToState('charged')
+<span class='line'>231</span>         // logs 'entered charged state'
+<span class='line'>232</span>         // but does *not* log  'exited poweredDown state'
+<span class='line'>233</span>         robotManager.getPath('currentState.name') // 'charged
+<span class='line'>234</span> 
+<span class='line'>235</span>         robotManager.goToState('poweredUp.mobile')
+<span class='line'>236</span>         // logs
+<span class='line'>237</span>         // 'exited charged state'
+<span class='line'>238</span>         // 'exited poweredDown state'
+<span class='line'>239</span>         // 'entered poweredUp state'
+<span class='line'>240</span>         // 'entered mobile state'
+<span class='line'>241</span> 
+<span class='line'>242</span>   During development you can set a StateManager's `enableLogging` property to `true` to
+<span class='line'>243</span>   receive console messages of state transitions.
+<span class='line'>244</span> 
+<span class='line'>245</span>         robotManager = Ember.StateManager.create({
+<span class='line'>246</span>           enableLogging: true
+<span class='line'>247</span>         })
+<span class='line'>248</span> 
+<span class='line'>249</span>   ## Managing currentState with Actions
+<span class='line'>250</span>   To control which transitions between states are possible for a given state, StateManager
+<span class='line'>251</span>   can receive and route action messages to its states via the `send` method.  Calling to `send` with
+<span class='line'>252</span>   an action name will begin searching for a method with the same name starting at the current state
+<span class='line'>253</span>   and moving up through the parent states in a state hierarchy until an appropriate method is found
+<span class='line'>254</span>   or the StateManager instance itself is reached. 
+<span class='line'>255</span> 
+<span class='line'>256</span>   If an appropriately named method is found it will be called with the state manager as the first
+<span class='line'>257</span>   argument and an optional `context` object as the second argument.
+<span class='line'>258</span> 
+<span class='line'>259</span>       managerA = Ember.StateManager.create({
+<span class='line'>260</span>         initialState: 'stateOne.substateOne.subsubstateOne',
+<span class='line'>261</span>         stateOne: Ember.State.create({
+<span class='line'>262</span>           substateOne: Ember.State.create({
+<span class='line'>263</span>             anAction: function(manager, context){
+<span class='line'>264</span>               console.log("an action was called")
+<span class='line'>265</span>             },
+<span class='line'>266</span>             subsubstateOne: Ember.State.create({})
+<span class='line'>267</span>           })
+<span class='line'>268</span>         })
+<span class='line'>269</span>       })
+<span class='line'>270</span> 
+<span class='line'>271</span>       managerA.getPath('currentState.name') // 'subsubstateOne'
+<span class='line'>272</span>       managerA.send('anAction')
+<span class='line'>273</span>       // 'stateOne.substateOne.subsubstateOne' has no anAction method
+<span class='line'>274</span>       // so the 'anAction' method of 'stateOne.substateOne' is called
+<span class='line'>275</span>       // and logs "an action was called"
+<span class='line'>276</span>       // with managerA as the first argument
+<span class='line'>277</span>       // and no second argument
+<span class='line'>278</span> 
+<span class='line'>279</span>        someObject = {}
+<span class='line'>280</span>        managerA.send('anAction', someObject)
+<span class='line'>281</span>        // the 'anAction' method of 'stateOne.substateOne' is called again
+<span class='line'>282</span>        // with managerA as the first argument and
+<span class='line'>283</span>        // someObject as the second argument.
+<span class='line'>284</span> 
+<span class='line'>285</span> 
+<span class='line'>286</span>   If the StateManager attempts to send an action but does not find an appropriately named
+<span class='line'>287</span>   method in the current state or while moving upwards through the state hierarchy
+<span class='line'>288</span>   it will throw a new Ember.Error. Action detection only moves upwards through the state hierarchy
+<span class='line'>289</span>   from the current state. It does not search in other portions of the hierarchy.
+<span class='line'>290</span> 
+<span class='line'>291</span>         managerB = Ember.StateManager.create({
+<span class='line'>292</span>           initialState: 'stateOne.substateOne.subsubstateOne',
+<span class='line'>293</span>           stateOne: Ember.State.create({
+<span class='line'>294</span>             substateOne: Ember.State.create({
+<span class='line'>295</span>               subsubstateOne: Ember.State.create({})
+<span class='line'>296</span>             })
+<span class='line'>297</span>           }),
+<span class='line'>298</span>           stateTwo: Ember.State.create({
+<span class='line'>299</span>            anAction: function(manager, context){
+<span class='line'>300</span>              // will not be called below because it is
+<span class='line'>301</span>              // not a parent of the current state
+<span class='line'>302</span>            }
+<span class='line'>303</span>           })
+<span class='line'>304</span>         })
+<span class='line'>305</span> 
+<span class='line'>306</span>         managerB.getPath('currentState.name') // 'subsubstateOne'
+<span class='line'>307</span>         managerB.send('anAction')
+<span class='line'>308</span>         // Error: &lt;Ember.StateManager:ember132> could not
+<span class='line'>309</span>         // respond to event anAction in state stateOne.substateOne.subsubstateOne.
+<span class='line'>310</span> 
+<span class='line'>311</span>   Inside of an action method the given state should delegate `goToState` calls on its
+<span class='line'>312</span>   StateManager.
+<span class='line'>313</span> 
+<span class='line'>314</span>         robotManager = Ember.StateManager.create({
+<span class='line'>315</span>           initialState: 'poweredDown.charging',
+<span class='line'>316</span>            poweredDown: Ember.State.create({
+<span class='line'>317</span>              charging: Ember.State.create({
+<span class='line'>318</span>                 chargeComplete: function(manager, context){
+<span class='line'>319</span>                   manager.goToState('charged')
+<span class='line'>320</span>                 }
+<span class='line'>321</span>              }),
+<span class='line'>322</span>              charged: Ember.State.create({
+<span class='line'>323</span>                boot: function(manager, context){
+<span class='line'>324</span>                   manager.goToState('poweredUp')
+<span class='line'>325</span>                }
+<span class='line'>326</span>              })
+<span class='line'>327</span>            }),
+<span class='line'>328</span>            poweredUp: Ember.State.create({
+<span class='line'>329</span>              beginExtermination: function(manager, context){
+<span class='line'>330</span>                 manager.goToState('rampaging')
+<span class='line'>331</span>              },
+<span class='line'>332</span>              rampaging: Ember.State.create()
+<span class='line'>333</span>            })
+<span class='line'>334</span>          })
+<span class='line'>335</span> 
+<span class='line'>336</span>          robotManager.getPath('currentState.name') // 'charging'
+<span class='line'>337</span>          robotManager.send('boot') // throws error, no boot action  
+<span class='line'>338</span>                                    // in current hierarchy
+<span class='line'>339</span>          robotManager.getPath('currentState.name') // remains 'charging'
+<span class='line'>340</span> 
+<span class='line'>341</span>          robotManager.send('beginExtermination') // throws error, no beginExtermination
+<span class='line'>342</span>                                                  // action in current hierarchy
+<span class='line'>343</span>          robotManager.getPath('currentState.name') // remains 'charging'
+<span class='line'>344</span> 
+<span class='line'>345</span>          robotManager.send('chargeComplete')
+<span class='line'>346</span>          robotManager.getPath('currentState.name') // 'charged'
+<span class='line'>347</span> 
+<span class='line'>348</span>          robotManager.send('boot')
+<span class='line'>349</span>          robotManager.getPath('currentState.name') // 'poweredUp'
+<span class='line'>350</span> 
+<span class='line'>351</span>          robotManager.send('beginExtermination', allHumans)
+<span class='line'>352</span>          robotManager.getPath('currentState.name') // 'rampaging'
+<span class='line'>353</span> 
+<span class='line'>354</span> 
+<span class='line'>355</span>   ## Interactions with Ember's View System.
+<span class='line'>356</span>   When combined with instances of `Ember.ViewState`, StateManager is designed to 
+<span class='line'>357</span>   interact with Ember's view system to control which views are added to 
+<span class='line'>358</span>   and removed from the DOM based on the manager's current state.
+<span class='line'>359</span> 
+<span class='line'>360</span>   By default, a StateManager will manage views inside the 'body' element. This can be
+<span class='line'>361</span>   customized by setting the `rootElement` property to a CSS selector of an existing 
+<span class='line'>362</span>   HTML element you would prefer to receive view rendering.
+<span class='line'>363</span> 
+<span class='line'>364</span> 
+<span class='line'>365</span>       viewStates = Ember.StateManager.create({
+<span class='line'>366</span>         rootElement: '#some-other-element'
+<span class='line'>367</span>       })
+<span class='line'>368</span> 
+<span class='line'>369</span>   You can also specify a particular instance of `Ember.ContainerView` you would like to receive
+<span class='line'>370</span>   view rendering by setting the `rootView` property. You will be responsible for placing
+<span class='line'>371</span>   this element into the DOM yourself.
+<span class='line'>372</span> 
+<span class='line'>373</span>       aLayoutView = Ember.ContainerView.create()
+<span class='line'>374</span> 
+<span class='line'>375</span>       // make sure this view instance is added to the browser
+<span class='line'>376</span>       aLayoutView.appendTo('body') 
+<span class='line'>377</span> 
+<span class='line'>378</span>       App.viewStates = Ember.StateManager.create({
+<span class='line'>379</span>         rootView: aLayoutView
+<span class='line'>380</span>       })
+<span class='line'>381</span> 
+<span class='line'>382</span> 
+<span class='line'>383</span>   Once you have an instance of StateManager controlling a view, you can provide states
+<span class='line'>384</span>   that are instances of `Ember.ViewState`.  When the StateManager enters a state
+<span class='line'>385</span>   that is an instance of `Ember.ViewState` that `ViewState`'s `view` property will be
+<span class='line'>386</span>   instantiated and inserted into the StateManager's `rootView` or `rootElement`.
+<span class='line'>387</span>   When a state is exited, the `ViewState`'s view will be removed from the StateManager's
+<span class='line'>388</span>   view.
+<span class='line'>389</span> 
+<span class='line'>390</span>       ContactListView = Ember.View.extend({
+<span class='line'>391</span>         classNames: ['my-contacts-css-class'],
+<span class='line'>392</span>         defaultTemplate: Ember.Handlebars.compile('&lt;h2>People&lt;/h2>')
+<span class='line'>393</span>       })
+<span class='line'>394</span> 
+<span class='line'>395</span>       PhotoListView = Ember.View.extend({
+<span class='line'>396</span>         classNames: ['my-photos-css-class'],
+<span class='line'>397</span>         defaultTemplate: Ember.Handlebars.compile('&lt;h2>Photos&lt;/h2>')
+<span class='line'>398</span>       })
+<span class='line'>399</span> 
+<span class='line'>400</span>       viewStates = Ember.StateManager.create({
+<span class='line'>401</span>         showingPeople: Ember.ViewState.create({
+<span class='line'>402</span>           view: ContactListView
+<span class='line'>403</span>         }),
+<span class='line'>404</span>         showingPhotos: Ember.ViewState.create({
+<span class='line'>405</span>           view: PhotoListView
+<span class='line'>406</span>         })
+<span class='line'>407</span>       })
+<span class='line'>408</span> 
+<span class='line'>409</span>       viewStates.goToState('showingPeople')
+<span class='line'>410</span> 
+<span class='line'>411</span>   The above code will change the rendered HTML from
+<span class='line'>412</span> 
+<span class='line'>413</span>       &lt;body>&lt;/body>
+<span class='line'>414</span> 
+<span class='line'>415</span>   to
+<span class='line'>416</span> 
+<span class='line'>417</span>       &lt;body>
+<span class='line'>418</span>         &lt;div id="ember1" class="ember-view my-contacts-css-class">
+<span class='line'>419</span>           &lt;h2>People&lt;/h2>
+<span class='line'>420</span>         &lt;/div>
+<span class='line'>421</span>       &lt;/body>
+<span class='line'>422</span> 
+<span class='line'>423</span>   Changing the current state via `goToState` from `showingPeople` to
+<span class='line'>424</span>   `showingPhotos` will remove the `showingPeople` view and add the `showingPhotos` view:
+<span class='line'>425</span> 
+<span class='line'>426</span>       viewStates.goToState('showingPhotos')
+<span class='line'>427</span> 
+<span class='line'>428</span>   will change the rendered HTML to
+<span class='line'>429</span> 
+<span class='line'>430</span>       &lt;body>
+<span class='line'>431</span>         &lt;div id="ember2" class="ember-view my-photos-css-class">
+<span class='line'>432</span>           &lt;h2>Photos&lt;/h2>
+<span class='line'>433</span>         &lt;/div>
+<span class='line'>434</span>       &lt;/body>
+<span class='line'>435</span> 
+<span class='line'>436</span> 
+<span class='line'>437</span>   When entering nested `ViewState`s, each state's view will be draw into the the StateManager's
+<span class='line'>438</span>   `rootView` or `rootElement` as siblings.
+<span class='line'>439</span> 
+<span class='line'>440</span> 
+<span class='line'>441</span>       ContactListView = Ember.View.extend({
+<span class='line'>442</span>         classNames: ['my-contacts-css-class'],
+<span class='line'>443</span>         defaultTemplate: Ember.Handlebars.compile('&lt;h2>People&lt;/h2>')
+<span class='line'>444</span>       })
+<span class='line'>445</span> 
+<span class='line'>446</span>       EditAContactView = Ember.View.extend({
+<span class='line'>447</span>         classNames: ['editing-a-contact-css-class'],
+<span class='line'>448</span>         defaultTemplate: Ember.Handlebars.compile('Editing...')
+<span class='line'>449</span>       })
+<span class='line'>450</span> 
+<span class='line'>451</span>       viewStates = Ember.StateManager.create({
+<span class='line'>452</span>         showingPeople: Ember.ViewState.create({
+<span class='line'>453</span>           view: ContactListView,
+<span class='line'>454</span> 
+<span class='line'>455</span>           withEditingPanel: Ember.ViewState.create({
+<span class='line'>456</span>             view: EditAContactView
+<span class='line'>457</span>           })
+<span class='line'>458</span>         })
+<span class='line'>459</span>       })
+<span class='line'>460</span> 
+<span class='line'>461</span> 
+<span class='line'>462</span>       viewStates.goToState('showingPeople.withEditingPanel')
+<span class='line'>463</span> 
+<span class='line'>464</span> 
+<span class='line'>465</span>   Will result in the following rendered HTML:
+<span class='line'>466</span> 
+<span class='line'>467</span>       &lt;body>
+<span class='line'>468</span>         &lt;div id="ember2" class="ember-view my-contacts-css-class">
+<span class='line'>469</span>           &lt;h2>People&lt;/h2>
+<span class='line'>470</span>         &lt;/div>
+<span class='line'>471</span> 
+<span class='line'>472</span>         &lt;div id="ember2" class="ember-view editing-a-contact-css-class">
+<span class='line'>473</span>           Editing...
+<span class='line'>474</span>         &lt;/div>
+<span class='line'>475</span>       &lt;/body>
+<span class='line'>476</span> 
+<span class='line'>477</span> 
+<span class='line'>478</span>   ViewState views are added and removed from their StateManager's view via their
+<span class='line'>479</span>   `enter` and `exit` methods. If you need to override these methods, be sure to call
+<span class='line'>480</span>   `_super` to maintain the adding and removing behavior:
+<span class='line'>481</span> 
+<span class='line'>482</span>       viewStates = Ember.StateManager.create({
+<span class='line'>483</span>         aState: Ember.ViewState.create({
+<span class='line'>484</span>           view: Ember.View.extend({}),
+<span class='line'>485</span>           enter: function(manager, transition){
+<span class='line'>486</span>             // calling _super ensures this view will be
+<span class='line'>487</span>             // properly inserted
+<span class='line'>488</span>             this._super();
+<span class='line'>489</span> 
+<span class='line'>490</span>             // now you can do other things
+<span class='line'>491</span>           }
+<span class='line'>492</span>         })
+<span class='line'>493</span>       })
+<span class='line'>494</span> 
+<span class='line'>495</span>   ## Managing Multiple Sections of A Page With States
+<span class='line'>496</span>   Multiple StateManagers can be combined to control multiple areas of an application's rendered views.
+<span class='line'>497</span>   Given the following HTML body:
+<span class='line'>498</span> 
+<span class='line'>499</span>       &lt;body>
+<span class='line'>500</span>         &lt;div id='sidebar-nav'>
+<span class='line'>501</span>         &lt;/div>
+<span class='line'>502</span>         &lt;div id='content-area'>
+<span class='line'>503</span>         &lt;/div>
+<span class='line'>504</span>       &lt;/body>
+<span class='line'>505</span> 
+<span class='line'>506</span>   You could separately manage view state for each section with two StateManagers
+<span class='line'>507</span> 
+<span class='line'>508</span>       navigationStates = Ember.StateManager.create({
+<span class='line'>509</span>         rootElement: '#sidebar-nav',
+<span class='line'>510</span>         userAuthenticated: Em.ViewState.create({
+<span class='line'>511</span>           view: Ember.View.extend({})
+<span class='line'>512</span>         }),
+<span class='line'>513</span>         userNotAuthenticated: Em.ViewState.create({
+<span class='line'>514</span>           view: Ember.View.extend({})
+<span class='line'>515</span>         })
+<span class='line'>516</span>       })
+<span class='line'>517</span> 
+<span class='line'>518</span>       contentStates = Ember.StateManager.create({
+<span class='line'>519</span>         rootElement: '#content-area',
+<span class='line'>520</span>         books: Em.ViewState.create({
+<span class='line'>521</span>           view: Ember.View.extend({})
+<span class='line'>522</span>         }),
+<span class='line'>523</span>         music: Em.ViewState.create({
+<span class='line'>524</span>           view: Ember.View.extend({})
+<span class='line'>525</span>         })
+<span class='line'>526</span>       })
+<span class='line'>527</span> 
+<span class='line'>528</span> 
+<span class='line'>529</span>   If you prefer to start with an empty body and manage state programmatically you
+<span class='line'>530</span>   can also take advantage of StateManager's `rootView` property and the ability of 
+<span class='line'>531</span>   `Ember.ContainerView`s to manually manage their child views. 
+<span class='line'>532</span> 
+<span class='line'>533</span> 
+<span class='line'>534</span>       dashboard = Ember.ContainerView.create({
+<span class='line'>535</span>         childViews: ['navigationAreaView', 'contentAreaView'],
+<span class='line'>536</span>         navigationAreaView: Ember.ContainerView.create({}),
+<span class='line'>537</span>         contentAreaView: Ember.ContainerView.create({})
+<span class='line'>538</span>       })
+<span class='line'>539</span> 
+<span class='line'>540</span>       navigationStates = Ember.StateManager.create({
+<span class='line'>541</span>         rootView: dashboard.get('navigationAreaView'),
+<span class='line'>542</span>         userAuthenticated: Em.ViewState.create({
+<span class='line'>543</span>           view: Ember.View.extend({})
+<span class='line'>544</span>         }),
+<span class='line'>545</span>         userNotAuthenticated: Em.ViewState.create({
+<span class='line'>546</span>           view: Ember.View.extend({})
+<span class='line'>547</span>         })
+<span class='line'>548</span>       })
+<span class='line'>549</span> 
+<span class='line'>550</span>       contentStates = Ember.StateManager.create({
+<span class='line'>551</span>         rootView: dashboard.get('contentAreaView'),
+<span class='line'>552</span>         books: Em.ViewState.create({
+<span class='line'>553</span>           view: Ember.View.extend({})
+<span class='line'>554</span>         }),
+<span class='line'>555</span>         music: Em.ViewState.create({
+<span class='line'>556</span>           view: Ember.View.extend({})
+<span class='line'>557</span>         })
+<span class='line'>558</span>       })
+<span class='line'>559</span> 
+<span class='line'>560</span>       dashboard.appendTo('body')
+<span class='line'>561</span> 
+<span class='line'>562</span>   ## User Manipulation of State via `{{action}}` Helpers
+<span class='line'>563</span>   The Handlebars `{{action}}` helper is StateManager-aware and will use StateManager action sending 
+<span class='line'>564</span>   to connect user interaction to action-based state transitions.
+<span class='line'>565</span> 
+<span class='line'>566</span>   Given the following body and handlebars template
+<span class='line'>567</span> 
+<span class='line'>568</span>       &lt;body>
+<span class='line'>569</span>         &lt;script type='text/x-handlebars'>
+<span class='line'>570</span>           &lt;a href="#" {{action "anAction" target="App.appStates"}}> Go &lt;/a>
+<span class='line'>571</span>         &lt;/script>
+<span class='line'>572</span>       &lt;/body>
+<span class='line'>573</span> 
+<span class='line'>574</span>   And application code
+<span class='line'>575</span> 
+<span class='line'>576</span>       App = Ember.Application.create()
+<span class='line'>577</span>       App.appStates = Ember.StateManager.create({
+<span class='line'>578</span>         initialState: 'aState',
+<span class='line'>579</span>         aState: Ember.State.create({
+<span class='line'>580</span>           anAction: function(manager, context){}
+<span class='line'>581</span>         }),
+<span class='line'>582</span>         bState: Ember.State.create({})
+<span class='line'>583</span>       })
+<span class='line'>584</span> 
+<span class='line'>585</span>   A user initiated click or touch event on "Go" will trigger the 'anAction' method of
+<span class='line'>586</span>   `App.appStates.aState` with `App.appStates` as the first argument and a
+<span class='line'>587</span>   `jQuery.Event` object as the second object. The `jQuery.Event` will include a property
+<span class='line'>588</span>   `view` that references the `Ember.View` object that was interacted with.
+<span class='line'>589</span>   
+<span class='line'>590</span> **/</span><span class="WHIT">
+<span class='line'>591</span> </span><span class="NAME">Ember.StateManager</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.State.extend</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="COMM">/** @scope Ember.State.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>593</span> 
+<span class='line'>594</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'>595</span>     When creating a new statemanager, look for a default state to transition
+<span class='line'>596</span>     into. This state can either be named `start`, or can be specified using the
+<span class='line'>597</span>     `initialState` property.
+<span class='line'>598</span>   */</span><span class="WHIT">
+<span class='line'>599</span> </span><span class="WHIT">  </span><span class="NAME">init</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>600</span> </span><span class="WHIT">    </span><span class="NAME">this._super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>601</span> 
+<span class='line'>602</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">initialState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'initialState'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>603</span> 
+<span class='line'>604</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">initialState</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">getPath</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'states.start'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>605</span> </span><span class="WHIT">      </span><span class="NAME">initialState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'start'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>606</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>607</span> 
+<span class='line'>608</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">initialState</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>609</span> </span><span class="WHIT">      </span><span class="NAME">this.goToState</span><span class="PUNC">(</span><span class="NAME">initialState</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>612</span> 
+<span class='line'>613</span> </span><span class="WHIT">  </span><span class="NAME">currentState</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>614</span> 
+<span class='line'>615</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'>616</span>     @property
+<span class='line'>617</span> 
+<span class='line'>618</span>     If set to true, `errorOnUnhandledEvents` will cause an exception to be
+<span class='line'>619</span>     raised if you attempt to send an event to a state manager that is not
+<span class='line'>620</span>     handled by the current state or any of its parent states.
+<span class='line'>621</span>   */</span><span class="WHIT">
+<span class='line'>622</span> </span><span class="WHIT">  </span><span class="NAME">errorOnUnhandledEvent</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>623</span> 
+<span class='line'>624</span> </span><span class="WHIT">  </span><span class="COMM">/**
+<span class='line'>625</span>     @property
+<span class='line'>626</span> 
+<span class='line'>627</span>     If the current state is a view state or the descendent of a view state,
+<span class='line'>628</span>     this property will be the view associated with it. If there is no
+<span class='line'>629</span>     view state active in this state manager, this value will be null.
+<span class='line'>630</span>   */</span><span class="WHIT">
+<span class='line'>631</span> </span><span class="WHIT">  </span><span class="NAME">currentView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Ember.computed</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>632</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'currentState'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>633</span> </span><span class="WHIT">        </span><span class="NAME">view</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>634</span> 
+<span class='line'>635</span> </span><span class="WHIT">    </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">currentState</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">currentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'isViewState'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>637</span> </span><span class="WHIT">        </span><span class="NAME">view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">currentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'view'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>638</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">view</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>639</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>640</span> 
+<span class='line'>641</span> </span><span class="WHIT">      </span><span class="NAME">currentState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">currentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'parentState'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>642</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>643</span> 
+<span class='line'>644</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>645</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">property</span><span class="PUNC">(</span><span class="STRN">'currentState'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">cacheable</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>646</span> 
+<span class='line'>647</span> </span><span class="WHIT">  </span><span class="NAME">send</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>648</span> </span><span class="WHIT">    </span><span class="NAME">this.sendRecursively</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'currentState'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>649</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>650</span> 
+<span class='line'>651</span> </span><span class="WHIT">  </span><span class="NAME">sendRecursively</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">currentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>652</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">log</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.enableLogging</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>653</span> 
+<span class='line'>654</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">action</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">currentState</span><span class="PUNC">[</span><span class="NAME">event</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>655</span> 
+<span class='line'>656</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">action</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>657</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">log</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="NAME">fmt</span><span class="PUNC">(</span><span class="STRN">"STATEMANAGER: Sending event '%@' to state %@."</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">currentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'path'</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>658</span> </span><span class="WHIT">      </span><span class="NAME">action.call</span><span class="PUNC">(</span><span class="NAME">currentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>659</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>660</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">parentState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">currentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'parentState'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>661</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">parentState</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>662</span> </span><span class="WHIT">        </span><span class="NAME">this.sendRecursively</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">parentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>663</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'errorOnUnhandledEvent'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>664</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Ember.Error</span><span class="PUNC">(</span><span class="NAME">this.toString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">" could not respond to event "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">event</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">" in state "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">getPath</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'currentState.path'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>665</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>666</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>667</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>668</span> 
+<span class='line'>669</span> </span><span class="WHIT">  </span><span class="NAME">findStatesByRoute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">route</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>670</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">route</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">route</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>671</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">route.split</span><span class="PUNC">(</span><span class="STRN">'.'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ret</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>672</span> 
+<span class='line'>673</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">len</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>674</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">states</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'states'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>675</span> 
+<span class='line'>676</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">states</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>677</span> 
+<span class='line'>678</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">states</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>679</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">state</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">ret.push</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>680</span> </span><span class="WHIT">      </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>681</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>682</span> 
+<span class='line'>683</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ret</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>684</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>685</span> 
+<span class='line'>686</span> </span><span class="WHIT">  </span><span class="NAME">goToState</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>687</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Ember.empty</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>688</span> 
+<span class='line'>689</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'currentState'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">newState</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>690</span> 
+<span class='line'>691</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">exitStates</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">enterStates</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>692</span> 
+<span class='line'>693</span> </span><span class="WHIT">    </span><span class="NAME">state</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">currentState</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>694</span> 
+<span class='line'>695</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">state.routes</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>696</span> </span><span class="WHIT">      </span><span class="COMM">// cache hit</span><span class="WHIT">
+<span class='line'>697</span> </span><span class="WHIT">      </span><span class="NAME">exitStates</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">state.routes</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">exitStates</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>698</span> </span><span class="WHIT">      </span><span class="NAME">enterStates</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">state.routes</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">enterStates</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>699</span> </span><span class="WHIT">      </span><span class="NAME">state</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">state.routes</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">futureState</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>700</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>701</span> </span><span class="WHIT">      </span><span class="COMM">// cache miss</span><span class="WHIT">
+<span class='line'>702</span> 
+<span class='line'>703</span> </span><span class="WHIT">      </span><span class="NAME">newState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.findStatesByRoute</span><span class="PUNC">(</span><span class="NAME">currentState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>704</span> 
+<span class='line'>705</span> </span><span class="WHIT">      </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">state</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">newState</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>706</span> </span><span class="WHIT">        </span><span class="NAME">exitStates.unshift</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>707</span> 
+<span class='line'>708</span> </span><span class="WHIT">        </span><span class="NAME">state</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'parentState'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>709</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">state</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>710</span> </span><span class="WHIT">          </span><span class="NAME">newState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.findStatesByRoute</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>711</span> </span><span class="WHIT">          </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">newState</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>712</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>713</span> </span><span class="WHIT">        </span><span class="NAME">newState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.findStatesByRoute</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>714</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>715</span> 
+<span class='line'>716</span> </span><span class="WHIT">      </span><span class="NAME">enterStates</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newState.slice</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>717</span> </span><span class="WHIT">      </span><span class="NAME">exitStates</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">exitStates.slice</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>718</span> 
+<span class='line'>719</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">enterStates.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>720</span> </span><span class="WHIT">        </span><span class="NAME">state</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">enterStates</span><span class="PUNC">[</span><span class="NAME">enterStates.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>721</span> 
+<span class='line'>722</span> </span><span class="WHIT">        </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">enterStates.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">enterStates</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">exitStates</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>723</span> </span><span class="WHIT">          </span><span class="NAME">enterStates.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>724</span> </span><span class="WHIT">          </span><span class="NAME">exitStates.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>725</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>726</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>727</span> 
+<span class='line'>728</span> </span><span class="WHIT">      </span><span class="NAME">currentState.routes</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>729</span> </span><span class="WHIT">        </span><span class="NAME">exitStates</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">exitStates</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>730</span> </span><span class="WHIT">        </span><span class="NAME">enterStates</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">enterStates</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>731</span> </span><span class="WHIT">        </span><span class="NAME">futureState</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">state</span><span class="WHIT">
+<span class='line'>732</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>733</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>734</span> 
+<span class='line'>735</span> </span><span class="WHIT">    </span><span class="NAME">this.enterState</span><span class="PUNC">(</span><span class="NAME">exitStates</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">enterStates</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">state</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>736</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>737</span> 
+<span class='line'>738</span> </span><span class="WHIT">  </span><span class="NAME">getState</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>739</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">state</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>740</span> </span><span class="WHIT">        </span><span class="NAME">parentState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'parentState'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>741</span> 
+<span class='line'>742</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>743</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">state</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>744</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">parentState</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>745</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">parentState.getState</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>746</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>747</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>748</span> 
+<span class='line'>749</span> </span><span class="WHIT">  </span><span class="NAME">asyncEach</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">doneCallback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>750</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">async</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">self</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>751</span> 
+<span class='line'>752</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">list.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>753</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">doneCallback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">doneCallback.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>754</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>755</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>756</span> 
+<span class='line'>757</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">head</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>758</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tail</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">list.slice</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>759</span> 
+<span class='line'>760</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">transition</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>761</span> </span><span class="WHIT">      </span><span class="NAME">async</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">async</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>762</span> </span><span class="WHIT">      </span><span class="NAME">resume</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>763</span> </span><span class="WHIT">        </span><span class="NAME">self.asyncEach</span><span class="PUNC">(</span><span class="NAME">tail</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">doneCallback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>764</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>765</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>766</span> 
+<span class='line'>767</span> </span><span class="WHIT">    </span><span class="NAME">callback.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">head</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">transition</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>768</span> 
+<span class='line'>769</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">async</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">transition.resume</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>770</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>771</span> 
+<span class='line'>772</span> </span><span class="WHIT">  </span><span class="NAME">enterState</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">exitStates</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">enterStates</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">state</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>773</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">log</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.enableLogging</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>774</span> 
+<span class='line'>775</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">stateManager</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>776</span> 
+<span class='line'>777</span> </span><span class="WHIT">    </span><span class="NAME">exitStates</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">exitStates.slice</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">reverse</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>778</span> </span><span class="WHIT">    </span><span class="NAME">this.asyncEach</span><span class="PUNC">(</span><span class="NAME">exitStates</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">transition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>779</span> </span><span class="WHIT">      </span><span class="NAME">state.exit</span><span class="PUNC">(</span><span class="NAME">stateManager</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">transition</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>780</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>781</span> </span><span class="WHIT">      </span><span class="NAME">this.asyncEach</span><span class="PUNC">(</span><span class="NAME">enterStates</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">transition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>782</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">log</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="STRN">"STATEMANAGER: Entering "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'path'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>783</span> </span><span class="WHIT">        </span><span class="NAME">state.enter</span><span class="PUNC">(</span><span class="NAME">stateManager</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">transition</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>784</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>785</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">startState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">state</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">enteredState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">initialState</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>786</span> 
+<span class='line'>787</span> </span><span class="WHIT">        </span><span class="NAME">initialState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">startState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'initialState'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>788</span> 
+<span class='line'>789</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">initialState</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>790</span> </span><span class="WHIT">          </span><span class="NAME">initialState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'start'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>791</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>792</span> 
+<span class='line'>793</span> </span><span class="WHIT">        </span><span class="COMM">// right now, start states cannot be entered asynchronously</span><span class="WHIT">
+<span class='line'>794</span> </span><span class="WHIT">        </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">startState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">startState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'states'</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">initialState</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>795</span> </span><span class="WHIT">          </span><span class="NAME">enteredState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">startState</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>796</span> 
+<span class='line'>797</span> </span><span class="WHIT">          </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">log</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="STRN">"STATEMANAGER: Entering "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">startState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'path'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>798</span> </span><span class="WHIT">          </span><span class="NAME">startState.enter</span><span class="PUNC">(</span><span class="NAME">stateManager</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>799</span> 
+<span class='line'>800</span> </span><span class="WHIT">          </span><span class="NAME">initialState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">startState</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'initialState'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>801</span> 
+<span class='line'>802</span> </span><span class="WHIT">          </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">initialState</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>803</span> </span><span class="WHIT">            </span><span class="NAME">initialState</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'start'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>804</span> </span><span class="WHIT">          </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>805</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>806</span> 
+<span class='line'>807</span> </span><span class="WHIT">        </span><span class="NAME">set</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'currentState'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">enteredState</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">state</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>808</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>809</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>810</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>811</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>812</span> </span></pre></body></html>

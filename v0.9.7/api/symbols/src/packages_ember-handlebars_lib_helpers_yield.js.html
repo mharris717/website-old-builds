@@ -1,0 +1,66 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.get</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">set</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ember.set</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  2</span> 
+<span class='line'>  3</span> </span><span class="COMM">/**
+<span class='line'>  4</span>   @name Handlebars.helpers.yield
+<span class='line'>  5</span>   
+<span class='line'>  6</span>   When used in a Handlebars template that is assigned to an `Ember.View` instance's
+<span class='line'>  7</span>   `layout` property Ember will render the layout template first, inserting the view's
+<span class='line'>  8</span>   own rendered output at the `{{ yield }}` location.
+<span class='line'>  9</span>   
+<span class='line'> 10</span>   An empty `&lt;body>` and the following application code:
+<span class='line'> 11</span>   
+<span class='line'> 12</span>         AView = Ember.View.extend({
+<span class='line'> 13</span>           classNames: ['a-view-with-layout'],
+<span class='line'> 14</span>           layout: Ember.Handlebars.compile('&lt;div class="wrapper">{{ yield }}&lt;/div>'),
+<span class='line'> 15</span>           template: Ember.Handlebars.compile('&lt;span>I am wrapped&lt;/span>')
+<span class='line'> 16</span>         })
+<span class='line'> 17</span> 
+<span class='line'> 18</span>         aView = AView.create()
+<span class='line'> 19</span>         aView.appendTo('body')
+<span class='line'> 20</span>         
+<span class='line'> 21</span>   Will result in the following HTML output:
+<span class='line'> 22</span>   
+<span class='line'> 23</span>         &lt;body>
+<span class='line'> 24</span>           &lt;div class='ember-view a-view-with-layout'>
+<span class='line'> 25</span>             &lt;div class="wrapper">
+<span class='line'> 26</span>               &lt;span>I am wrapped&lt;/span>
+<span class='line'> 27</span>             &lt;/div>
+<span class='line'> 28</span>           &lt;/div>
+<span class='line'> 29</span>         &lt;/body>
+<span class='line'> 30</span>   
+<span class='line'> 31</span>   
+<span class='line'> 32</span>   The yield helper cannot be used outside of a template assigned to an `Ember.View`'s `layout` property
+<span class='line'> 33</span>   and will throw an error if attempted.
+<span class='line'> 34</span>   
+<span class='line'> 35</span>       BView = Ember.View.extend({
+<span class='line'> 36</span>         classNames: ['a-view-with-layout'],
+<span class='line'> 37</span>         template: Ember.Handlebars.compile('{{yield}}')
+<span class='line'> 38</span>       })
+<span class='line'> 39</span> 
+<span class='line'> 40</span>       bView = BView.create()
+<span class='line'> 41</span>       bView.appendTo('body')
+<span class='line'> 42</span>       
+<span class='line'> 43</span>       // throws
+<span class='line'> 44</span>       // Uncaught Error: assertion failed: You called yield in a template that was not a layout
+<span class='line'> 45</span> */</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="NAME">Ember.Handlebars.registerHelper</span><span class="PUNC">(</span><span class="STRN">'yield'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">options.data.view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">template</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> 
+<span class='line'> 49</span> </span><span class="WHIT">  </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">view</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'layout'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">    </span><span class="NAME">view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'parentView'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 52</span> 
+<span class='line'> 53</span> </span><span class="WHIT">  </span><span class="NAME">ember_assert</span><span class="PUNC">(</span><span class="STRN">"You called yield in a template that was not a layout"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="PUNC">!</span><span class="NAME">view</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span> 
+<span class='line'> 55</span> </span><span class="WHIT">  </span><span class="NAME">template</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">get</span><span class="PUNC">(</span><span class="NAME">view</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'template'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span> 
+<span class='line'> 57</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">template</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">template</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 59</span> </span></pre></body></html>
